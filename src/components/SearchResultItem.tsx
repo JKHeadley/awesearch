@@ -10,7 +10,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   return (
     <Box borderWidth={1} borderRadius="lg" p={4}>
       <Flex>
-        <Image src={result.logo || '/devdiveai_logo.png'} alt={result.name} boxSize="100px" objectFit="contain" />
+        <Image src={result.logo || '/src/assets/logo.png'} alt={result.name} boxSize="100px" objectFit="contain" />
         <Box ml={4}>
           <Heading as="h2" size="md">
             <a href={result.url} target="_blank" rel="noopener noreferrer">
