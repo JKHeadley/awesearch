@@ -11,6 +11,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
     const { setSelectedTool } = useStore();
 
     const handleSelectTool = () => {
+        console.log("Selected Tool: ", result);
         setSelectedTool(result);
     }
     return (
