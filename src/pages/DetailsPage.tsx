@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import { 
-  Box, 
-  Image, 
-  Heading, 
-  Text, 
-  Button, 
-  VStack, 
-  HStack, 
-  Badge, 
-  Grid, 
+import {
+  Box,
+  Image,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  HStack,
+  Badge,
+  Grid,
   GridItem,
   Divider,
   Link,
   Tag,
   Card,
   CardBody,
-  useColorModeValue
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -28,6 +28,11 @@ const DetailsPage: React.FC = () => {
   const { selectedTool, setSelectedTool, isLoading, setIsLoading } = useStore();
   const bgColor = useColorModeValue('gray.50', 'gray.700');
   const cardBgColor = useColorModeValue('white', 'gray.600');
+
+  const logoSrc = useColorModeValue(
+    '/src/assets/logo-light.png',
+    '/src/assets/logo-dark.png',
+  );
 
   useEffect(() => {
     const fetchToolDetails = async () => {
@@ -50,33 +55,65 @@ const DetailsPage: React.FC = () => {
   if (!selectedTool) return null;
 
   return (
-    <Box maxW="container.xl" mx="auto" mt={8} pt={4} pb={16} px={4} bg={bgColor} minH="100vh">
+    <Box
+      maxW="container.xl"
+      mx="auto"
+      mt={8}
+      pt={4}
+      pb={16}
+      px={4}
+      bg={bgColor}
+      minH="100vh"
+    >
       <LoadingOverlay isLoading={isLoading} />
-      <Button as={RouterLink} to="/" mb={6} leftIcon={<ChevronLeftIcon />} size="lg" colorScheme="blue" variant="outline">
+      <Button
+        as={RouterLink}
+        to="/"
+        mb={6}
+        leftIcon={<ChevronLeftIcon />}
+        size="lg"
+        colorScheme="blue"
+        variant="outline"
+      >
         Back to Search Results
       </Button>
       <VStack align="stretch" spacing={8}>
         <Card>
           <CardBody>
             <HStack spacing={8} align="flex-start">
-              <Image 
-                src={selectedTool.logo || '/src/assets/logo.png'} 
-                alt={selectedTool.name} 
-                boxSize="150px" 
+              <Image
+                src={selectedTool.logo || logoSrc}
+                alt={selectedTool.name}
+                boxSize="150px"
                 objectFit="contain"
               />
               <Box>
                 <Heading as="h1" size="2xl" mb={2}>
                   {selectedTool.name}
                 </Heading>
-                <Link href={selectedTool.url} isExternal color="blue.500" fontSize="xl">
+                <Link
+                  href={selectedTool.url}
+                  isExternal
+                  color="blue.500"
+                  fontSize="xl"
+                >
                   {selectedTool.url} <ExternalLinkIcon mx="2px" />
                 </Link>
                 <HStack mt={4}>
-                  <Badge colorScheme={selectedTool.open_source ? 'green' : 'red'} fontSize="md" px={2} py={1}>
+                  <Badge
+                    colorScheme={selectedTool.open_source ? 'green' : 'red'}
+                    fontSize="md"
+                    px={2}
+                    py={1}
+                  >
                     {selectedTool.open_source ? 'Open Source' : 'Closed Source'}
                   </Badge>
-                  <Badge colorScheme={selectedTool.free ? 'green' : 'red'} fontSize="md" px={2} py={1}>
+                  <Badge
+                    colorScheme={selectedTool.free ? 'green' : 'red'}
+                    fontSize="md"
+                    px={2}
+                    py={1}
+                  >
                     {selectedTool.free ? 'Free' : 'Paid'}
                   </Badge>
                 </HStack>
@@ -90,7 +127,9 @@ const DetailsPage: React.FC = () => {
             <Heading as="h2" size="xl" mb={4}>
               AI Analysis
             </Heading>
-            <Text fontSize="lg" lineHeight="tall">{selectedTool.analysis}</Text>
+            <Text fontSize="lg" lineHeight="tall">
+              {selectedTool.analysis}
+            </Text>
           </CardBody>
         </Card>
 
@@ -182,7 +221,13 @@ const DetailsPage: React.FC = () => {
             </Heading>
             <HStack spacing={2} flexWrap="wrap">
               {selectedTool.keywords.map((keyword, index) => (
-                <Tag key={index} size="lg" colorScheme="blue" borderRadius="full" cursor="pointer">
+                <Tag
+                  key={index}
+                  size="lg"
+                  colorScheme="blue"
+                  borderRadius="full"
+                  cursor="pointer"
+                >
                   {keyword}
                 </Tag>
               ))}
