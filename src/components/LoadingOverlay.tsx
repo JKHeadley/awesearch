@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Text, VStack, Image } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const tips = [
   "AweSearch uses AI to find the perfect tools for your needs.",
@@ -44,14 +45,42 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
       justifyContent="center"
       zIndex={9999}
     >
-      <VStack spacing={4}>
-        <Spinner size="xl" color="white" />
-        <Text color="white" fontWeight="bold" fontSize="xl">
-          Loading...
-        </Text>
-        <Text color="white" textAlign="center" maxWidth="80%">
-          {currentTip}
-        </Text>
+      <VStack spacing={8}>
+        <motion.div
+          animate={{
+            y: ["0%", "-20%", "0%"],
+          }}
+          transition={{
+            duration: 2,
+            ease: "easeInOut",
+            times: [0, 0.5, 1],
+            repeat: Infinity,
+          }}
+        >
+          <Box bg="white" borderRadius="full" p={2}>
+            <Image src="/src/assets/logo.png" alt="AweSearch Logo" boxSize="100px" padding={4}/>
+          </Box>
+        </motion.div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentTip}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Box
+              bg="white"
+              borderRadius="md"
+              p={6}
+              boxShadow="lg"
+              maxWidth="400px"
+              textAlign="center"
+            >
+              <Text fontSize="lg">{currentTip}</Text>
+            </Box>
+          </motion.div>
+        </AnimatePresence>
       </VStack>
     </Box>
   );
