@@ -45,7 +45,7 @@ const DetailsPage: React.FC = () => {
   if (!selectedTool) return null;
 
   return (
-    <Box maxW="container.xl" mx="auto" mt={8} px={4}>
+    <Box maxW="container.xl" mx="auto" mt={8} pb={16} px={4}>
       <LoadingOverlay isLoading={isLoading} />
       <Button as={RouterLink} to="/" mb={4} leftIcon={<ChevronLeftIcon />}>
         Back to Search Results

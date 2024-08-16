@@ -22,7 +22,7 @@ const SearchPage: React.FC = () => {
   };
 
   return (
-    <Box maxW="container.xl" mx="auto" mt={8}>
+    <Box maxW="container.xl" mx="auto" pb={16} mt={8}>
       <LoadingOverlay isLoading={isLoading} />
       <VStack spacing={4}>
         <Input
