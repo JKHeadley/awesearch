@@ -15,7 +15,7 @@ interface SearchResult {
     // Add other fields as needed
 }
 
-interface ToolDetails extends SearchResult {
+export interface ToolDetails extends SearchResult {
     purpose: string;
     description: string;
     intended_use: string;

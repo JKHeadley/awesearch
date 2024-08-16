@@ -1,5 +1,6 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
+import { ToolDetails } from '../api/search';
 
 interface SearchResult {
   id: string;
@@ -17,8 +18,8 @@ interface AppState {
   setQuery: (query: string) => void;
   searchResults: SearchResult[];
   setSearchResults: (results: SearchResult[]) => void;
-  selectedTool: SearchResult | null;
-  setSelectedTool: (tool: SearchResult | null) => void;
+  selectedTool: ToolDetails | null;
+  setSelectedTool: (tool: ToolDetails | null) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
 }

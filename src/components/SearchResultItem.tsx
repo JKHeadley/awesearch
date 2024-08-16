@@ -16,17 +16,12 @@ interface SearchResultItemProps {
 }
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
-  const { setSelectedTool } = useStore();
 
   const logoSrc = useColorModeValue(
     '/src/assets/logo-light.png',
     '/src/assets/logo-dark.png',
   );
 
-  const handleSelectTool = () => {
-    console.log('Selected Tool: ', result);
-    setSelectedTool(result);
-  };
   return (
     <Box borderWidth={1} borderRadius="lg" p={4}>
       <Flex>
@@ -47,8 +42,8 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
           <Button
             as={RouterLink}
             to={`/details/${result._id}`}
+            state={{ analysis: result.analysis }}
             mt={2}
-            onClick={handleSelectTool}
           >
             View Details
           </Button>

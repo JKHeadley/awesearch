@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, useLocation, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Image,
@@ -28,11 +28,15 @@ const DetailsPage: React.FC = () => {
   const { selectedTool, setSelectedTool, isLoading, setIsLoading } = useStore();
   const bgColor = useColorModeValue('gray.50', 'gray.700');
   const cardBgColor = useColorModeValue('white', 'gray.600');
+  const location = useLocation();
 
   const logoSrc = useColorModeValue(
     '/src/assets/logo-light.png',
     '/src/assets/logo-dark.png',
   );
+
+  // Retrieve the analysis from the location state
+  const analysisFromState = location.state?.analysis;
 
   useEffect(() => {
     const fetchToolDetails = async () => {
@@ -128,7 +132,7 @@ const DetailsPage: React.FC = () => {
               AI Analysis
             </Heading>
             <Text fontSize="lg" lineHeight="tall">
-              {selectedTool.analysis}
+              {analysisFromState}
             </Text>
           </CardBody>
         </Card>
