@@ -4,11 +4,13 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Header from './components/Header';
 import SearchPage from './pages/SearchPage';
 import DetailsPage from './pages/DetailsPage';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
     <ChakraProvider>
       <Router>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<SearchPage />} />
