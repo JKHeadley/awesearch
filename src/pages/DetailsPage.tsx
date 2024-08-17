@@ -43,10 +43,14 @@ const DetailsPage: React.FC = () => {
   const location = useLocation();
   const [copied, setCopied] = useState(false);
 
-  const bgColor = useColorModeValue('gray.50', 'gray.700');
-  const cardBgColor = useColorModeValue('white', 'gray.600');
+  // Brand color scheme
+  const brandPink = '#FF69B4'; // Adjust this to match your exact pink
+  const brandBlue = useColorModeValue('#000080', '#F0F8FF'); // Dark blue for light mode, light blue/gray for dark mode
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const cardBgColor = useColorModeValue('white', 'gray.700');
+  const textColor = useColorModeValue('gray.800', 'gray.100');
   const accordionBgColor = useColorModeValue('blue.50', 'blue.900');
-  const accordionColor = useColorModeValue('blue.600', 'blue.200');
+  const accordionColor = useColorModeValue(brandBlue, brandPink);
 
   const logoSrc = useColorModeValue(
     '/src/assets/logo-light.png',
@@ -96,17 +100,17 @@ const DetailsPage: React.FC = () => {
         as={RouterLink}
         to="/"
         mb={6}
-        mt={4} // Added top margin
+        mt={4}
         leftIcon={<ChevronLeftIcon />}
         size={isMobile ? 'md' : 'lg'}
-        colorScheme="blue"
+        colorScheme="pink"
         variant="outline"
         width={isMobile ? 'full' : 'auto'}
       >
         Back to Search Results
       </Button>
       <VStack align="stretch" spacing={8}>
-        <Card>
+        <Card bg={cardBgColor} boxShadow="md">
           <CardBody>
             <Flex
               direction={isMobile ? 'column' : 'row'}
@@ -147,14 +151,18 @@ const DetailsPage: React.FC = () => {
                 </HStack>
               </Flex>
               <VStack align="start" flex={1} ml={isMobile ? 0 : 8} spacing={4}>
-                <Heading as="h1" size={isMobile ? 'xl' : '2xl'}>
+                <Heading
+                  as="h1"
+                  size={isMobile ? 'xl' : '2xl'}
+                  color={brandBlue}
+                >
                   {selectedTool.name}
                 </Heading>
                 <HStack>
                   <Link
                     href={selectedTool.url}
                     isExternal
-                    color="blue.500"
+                    color={brandPink}
                     fontSize={isMobile ? 'md' : 'lg'}
                   >
                     {selectedTool.url} <ExternalLinkIcon mx="2px" />
@@ -165,6 +173,7 @@ const DetailsPage: React.FC = () => {
                       icon={<CopyIcon />}
                       size="sm"
                       onClick={() => copyToClipboard(selectedTool.url)}
+                      colorScheme="pink"
                     />
                   </Tooltip>
                 </HStack>
@@ -192,8 +201,12 @@ const DetailsPage: React.FC = () => {
                 <AccordionIcon color={accordionColor} />
               </AccordionButton>
             </h2>
-            <AccordionPanel pb={4}>
-              <Text fontSize={isMobile ? 'md' : 'lg'} lineHeight="tall">
+            <AccordionPanel pb={4} bg={cardBgColor}>
+              <Text
+                fontSize={isMobile ? 'md' : 'lg'}
+                lineHeight="tall"
+                color={textColor}
+              >
                 {analysisFromState || selectedTool.analysis}
               </Text>
             </AccordionPanel>
@@ -217,21 +230,29 @@ const DetailsPage: React.FC = () => {
                 <AccordionIcon color={accordionColor} />
               </AccordionButton>
             </h2>
-            <AccordionPanel pb={4}>
+            <AccordionPanel pb={4} bg={cardBgColor}>
               <VStack align="stretch" spacing={4}>
                 <Box>
-                  <Heading as="h3" size="md" mb={2}>
+                  <Heading as="h3" size="md" mb={2} color={brandBlue}>
                     Summary
                   </Heading>
-                  <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'md'}
+                    lineHeight="tall"
+                    color={textColor}
+                  >
                     {selectedTool.summary}
                   </Text>
                 </Box>
                 <Box>
-                  <Heading as="h3" size="md" mb={2}>
+                  <Heading as="h3" size="md" mb={2} color={brandBlue}>
                     Description
                   </Heading>
-                  <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'md'}
+                    lineHeight="tall"
+                    color={textColor}
+                  >
                     {selectedTool.description}
                   </Text>
                 </Box>
@@ -257,24 +278,32 @@ const DetailsPage: React.FC = () => {
                 <AccordionIcon color={accordionColor} />
               </AccordionButton>
             </h2>
-            <AccordionPanel pb={4}>
+            <AccordionPanel pb={4} bg={cardBgColor}>
               <Grid
                 templateColumns={isMobile ? '1fr' : 'repeat(2, 1fr)'}
                 gap={4}
               >
                 <GridItem>
-                  <Heading as="h3" size="md" mb={2}>
+                  <Heading as="h3" size="md" mb={2} color={brandBlue}>
                     Purpose
                   </Heading>
-                  <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'md'}
+                    lineHeight="tall"
+                    color={textColor}
+                  >
                     {selectedTool.purpose}
                   </Text>
                 </GridItem>
                 <GridItem>
-                  <Heading as="h3" size="md" mb={2}>
+                  <Heading as="h3" size="md" mb={2} color={brandBlue}>
                     Intended Use
                   </Heading>
-                  <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'md'}
+                    lineHeight="tall"
+                    color={textColor}
+                  >
                     {selectedTool.intended_use}
                   </Text>
                 </GridItem>
@@ -283,9 +312,14 @@ const DetailsPage: React.FC = () => {
           </AccordionItem>
         </Accordion>
 
-        <Card>
+        <Card bg={cardBgColor}>
           <CardBody>
-            <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={4}>
+            <Heading
+              as="h3"
+              size={isMobile ? 'md' : 'lg'}
+              mb={4}
+              color={brandBlue}
+            >
               Categories
             </Heading>
             <Grid
@@ -294,12 +328,16 @@ const DetailsPage: React.FC = () => {
             >
               {['category', 'sub_category', 'group', 'class'].map((field) => (
                 <VStack key={field} align="start">
-                  <Text fontWeight="bold" fontSize={isMobile ? 'xs' : 'sm'}>
+                  <Text
+                    fontWeight="bold"
+                    fontSize={isMobile ? 'xs' : 'sm'}
+                    color={brandPink}
+                  >
                     {field.charAt(0).toUpperCase() +
                       field.slice(1).replace('_', '-')}
                     :
                   </Text>
-                  <Text fontSize={isMobile ? 'sm' : 'md'}>
+                  <Text fontSize={isMobile ? 'sm' : 'md'} color={textColor}>
                     {selectedTool[field]}
                   </Text>
                 </VStack>
@@ -308,9 +346,14 @@ const DetailsPage: React.FC = () => {
           </CardBody>
         </Card>
 
-        <Card>
+        <Card bg={cardBgColor}>
           <CardBody>
-            <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={4}>
+            <Heading
+              as="h3"
+              size={isMobile ? 'md' : 'lg'}
+              mb={4}
+              color={brandBlue}
+            >
               Keywords
             </Heading>
             <Box>
@@ -318,11 +361,11 @@ const DetailsPage: React.FC = () => {
                 <Tag
                   key={index}
                   size={isMobile ? 'sm' : 'md'}
-                  colorScheme="blue"
+                  colorScheme="pink"
                   borderRadius="full"
                   cursor="pointer"
                   m={1}
-                  _hover={{ bg: 'blue.600', color: 'white' }}
+                  _hover={{ bg: brandPink, color: 'white' }}
                 >
                   {keyword}
                 </Tag>
@@ -336,7 +379,7 @@ const DetailsPage: React.FC = () => {
             as={Link}
             href={selectedTool.url}
             isExternal
-            colorScheme="blue"
+            colorScheme="pink"
             rightIcon={<ExternalLinkIcon />}
           >
             Visit Website
@@ -346,6 +389,7 @@ const DetailsPage: React.FC = () => {
             onClick={() => {
               /* Implement share functionality */
             }}
+            colorScheme="blue"
           >
             Share
           </Button>
