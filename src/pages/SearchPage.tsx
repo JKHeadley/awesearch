@@ -40,10 +40,18 @@ const SearchPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const randomQuery = getRandomQuery();
-    setPlaceholder(randomQuery);
-    setQuery(randomQuery);
-    setIsPlaceholder(true);
+    setIsPlaceholder(exampleQueries.includes(query));
+  }, [query]);
+
+  useEffect(() => {
+    if (!query) {
+      const randomQuery = getRandomQuery();
+      setPlaceholder(randomQuery);
+      setQuery(randomQuery);
+      setIsPlaceholder(true);
+    } else {
+      setPlaceholder(query);
+    }
   }, [setQuery]);
 
   const handleSearch = async () => {
