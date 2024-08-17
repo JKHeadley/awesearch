@@ -16,14 +16,7 @@ import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
 import { searchDatabase } from '../api/search';
 import { useStore } from '../store/store';
-
-const exampleQueries = [
-  'I need a React component library with good accessibility features and extensive documentation.',
-  'Looking for a Python data visualization tool that works well with large datasets and supports interactive plots.',
-  'Recommend a lightweight CSS framework for rapid prototyping of responsive web designs.',
-  'Find me a Node.js ORM with support for multiple databases and an active community.',
-  "Suggest a JavaScript testing framework that's easy to set up and has good async support.",
-];
+import { exampleQueries } from './ExampleQueries';
 
 const SearchPage: React.FC = () => {
   const {
