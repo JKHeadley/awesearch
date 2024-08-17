@@ -8,7 +8,7 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
   return (
-    <VStack spacing={4} align="stretch">
+    <VStack spacing={4} align="stretch" width="100%">
       {results.map((result) => (
         <SearchResultItem key={result.url} result={result} />
       ))}
