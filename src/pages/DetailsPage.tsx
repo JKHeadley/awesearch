@@ -17,6 +17,7 @@ import {
   Card,
   CardBody,
   useColorModeValue,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -34,6 +35,8 @@ const DetailsPage: React.FC = () => {
     '/src/assets/logo-light.png',
     '/src/assets/logo-dark.png',
   );
+
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   // Retrieve the analysis from the location state
   const analysisFromState = location.state?.analysis;
@@ -62,10 +65,10 @@ const DetailsPage: React.FC = () => {
     <Box
       maxW="container.xl"
       mx="auto"
-      mt={8}
-      pt={4}
+      mt={4}
+      pt={2}
       pb={16}
-      px={4}
+      px={2}
       bg={bgColor}
       minH="100vh"
     >
@@ -73,40 +76,41 @@ const DetailsPage: React.FC = () => {
       <Button
         as={RouterLink}
         to="/"
-        mb={6}
+        mb={4}
         leftIcon={<ChevronLeftIcon />}
-        size="lg"
+        size={isMobile ? 'md' : 'lg'}
         colorScheme="blue"
         variant="outline"
+        width={isMobile ? 'full' : 'auto'}
       >
         Back to Search Results
       </Button>
-      <VStack align="stretch" spacing={8}>
+      <VStack align="stretch" spacing={4}>
         <Card>
           <CardBody>
-            <HStack spacing={8} align="flex-start">
+            <VStack spacing={4} align="start">
               <Image
                 src={selectedTool.logo || logoSrc}
                 alt={selectedTool.name}
-                boxSize="150px"
+                boxSize={isMobile ? '100px' : '150px'}
                 objectFit="contain"
               />
               <Box>
-                <Heading as="h1" size="2xl" mb={2}>
+                <Heading as="h1" size={isMobile ? 'xl' : '2xl'} mb={2}>
                   {selectedTool.name}
                 </Heading>
                 <Link
                   href={selectedTool.url}
                   isExternal
                   color="blue.500"
-                  fontSize="xl"
+                  fontSize={isMobile ? 'md' : 'xl'}
                 >
                   {selectedTool.url} <ExternalLinkIcon mx="2px" />
                 </Link>
-                <HStack mt={4}>
+                <VStack mt={4} align="start">
                   <Badge
                     colorScheme={selectedTool.open_source ? 'green' : 'red'}
-                    fontSize="md"
+                    fontSize="sm"
                     px={2}
                     py={1}
                   >
@@ -114,47 +118,51 @@ const DetailsPage: React.FC = () => {
                   </Badge>
                   <Badge
                     colorScheme={selectedTool.free ? 'green' : 'red'}
-                    fontSize="md"
+                    fontSize="sm"
                     px={2}
                     py={1}
                   >
                     {selectedTool.free ? 'Free' : 'Paid'}
                   </Badge>
-                </HStack>
+                </VStack>
               </Box>
-            </HStack>
+            </VStack>
           </CardBody>
         </Card>
 
         <Card>
           <CardBody>
-            <Heading as="h2" size="xl" mb={4}>
+            <Heading as="h2" size={isMobile ? 'lg' : 'xl'} mb={2}>
               AI Analysis
             </Heading>
-            <Text fontSize="lg" lineHeight="tall">
-              {analysisFromState}
+            <Text fontSize={isMobile ? 'md' : 'lg'} lineHeight="tall">
+              {analysisFromState || selectedTool.analysis}
             </Text>
           </CardBody>
         </Card>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={8}>
+        <Grid templateColumns={isMobile ? '1fr' : 'repeat(2, 1fr)'} gap={4}>
           <GridItem>
             <Card h="100%">
               <CardBody>
-                <Heading as="h3" size="lg" mb={4}>
+                <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
                   Summary
                 </Heading>
-                <Text lineHeight="tall">{selectedTool.summary}</Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  {selectedTool.summary}
+                </Text>
               </CardBody>
             </Card>
           </GridItem>
           <GridItem>
             <Card h="100%">
               <CardBody>
-                <Heading as="h3" size="lg" mb={4}>
+                <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
                   Purpose
                 </Heading>
-                <Text lineHeight="tall">{selectedTool.purpose}</Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  {selectedTool.purpose}
+                </Text>
               </CardBody>
             </Card>
           </GridItem>
@@ -162,31 +170,37 @@ const DetailsPage: React.FC = () => {
 
         <Card>
           <CardBody>
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
               Description
             </Heading>
-            <Text lineHeight="tall">{selectedTool.description}</Text>
+            <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+              {selectedTool.description}
+            </Text>
           </CardBody>
         </Card>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={8}>
+        <Grid templateColumns={isMobile ? '1fr' : 'repeat(2, 1fr)'} gap={4}>
           <GridItem>
             <Card h="100%">
               <CardBody>
-                <Heading as="h3" size="lg" mb={4}>
+                <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
                   Intended Use
                 </Heading>
-                <Text lineHeight="tall">{selectedTool.intended_use}</Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  {selectedTool.intended_use}
+                </Text>
               </CardBody>
             </Card>
           </GridItem>
           <GridItem>
             <Card h="100%">
               <CardBody>
-                <Heading as="h3" size="lg" mb={4}>
+                <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
                   Intended Audience
                 </Heading>
-                <Text lineHeight="tall">{selectedTool.intended_audience}</Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'} lineHeight="tall">
+                  {selectedTool.intended_audience}
+                </Text>
               </CardBody>
             </Card>
           </GridItem>
@@ -194,25 +208,44 @@ const DetailsPage: React.FC = () => {
 
         <Card>
           <CardBody>
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
               Categories
             </Heading>
-            <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+            <Grid
+              templateColumns={isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)'}
+              gap={2}
+            >
               <VStack align="start">
-                <Text fontWeight="bold">Category:</Text>
-                <Text>{selectedTool.category}</Text>
+                <Text fontWeight="bold" fontSize={isMobile ? 'xs' : 'sm'}>
+                  Category:
+                </Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'}>
+                  {selectedTool.category}
+                </Text>
               </VStack>
               <VStack align="start">
-                <Text fontWeight="bold">Sub-Category:</Text>
-                <Text>{selectedTool.sub_category}</Text>
+                <Text fontWeight="bold" fontSize={isMobile ? 'xs' : 'sm'}>
+                  Sub-Category:
+                </Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'}>
+                  {selectedTool.sub_category}
+                </Text>
               </VStack>
               <VStack align="start">
-                <Text fontWeight="bold">Group:</Text>
-                <Text>{selectedTool.group}</Text>
+                <Text fontWeight="bold" fontSize={isMobile ? 'xs' : 'sm'}>
+                  Group:
+                </Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'}>
+                  {selectedTool.group}
+                </Text>
               </VStack>
               <VStack align="start">
-                <Text fontWeight="bold">Class:</Text>
-                <Text>{selectedTool.class}</Text>
+                <Text fontWeight="bold" fontSize={isMobile ? 'xs' : 'sm'}>
+                  Class:
+                </Text>
+                <Text fontSize={isMobile ? 'sm' : 'md'}>
+                  {selectedTool.class}
+                </Text>
               </VStack>
             </Grid>
           </CardBody>
@@ -220,22 +253,23 @@ const DetailsPage: React.FC = () => {
 
         <Card>
           <CardBody>
-            <Heading as="h3" size="lg" mb={4}>
+            <Heading as="h3" size={isMobile ? 'md' : 'lg'} mb={2}>
               Keywords
             </Heading>
-            <HStack spacing={2} flexWrap="wrap">
+            <Box>
               {selectedTool.keywords.map((keyword, index) => (
                 <Tag
                   key={index}
-                  size="lg"
+                  size={isMobile ? 'sm' : 'md'}
                   colorScheme="blue"
                   borderRadius="full"
                   cursor="pointer"
+                  m={1}
                 >
                   {keyword}
                 </Tag>
               ))}
-            </HStack>
+            </Box>
           </CardBody>
         </Card>
       </VStack>
