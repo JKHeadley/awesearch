@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, VStack, Image, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  VStack,
+  Image,
+  useColorModeValue,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const tips = [
@@ -19,7 +26,8 @@ interface LoadingOverlayProps {
 
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
   const [currentTip, setCurrentTip] = useState(tips[0]);
-  
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const logoSrc = useColorModeValue(
     '/src/assets/logo-light.png',
     '/src/assets/logo-dark.png',
@@ -62,8 +70,9 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
       alignItems="center"
       justifyContent="center"
       zIndex={9999}
+      p={4}
     >
-      <VStack spacing={8}>
+      <VStack spacing={isMobile ? 4 : 8} maxWidth="100%">
         <motion.div
           animate={{
             y: ['0%', '-20%', '0%'],
@@ -78,14 +87,14 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
           <Box
             bg={logoBg}
             borderRadius="full"
-            p={2}
+            p={isMobile ? 1 : 2}
             boxShadow={`0 0 10px ${shadowColor}`}
           >
             <Image
               src={logoSrc}
               alt="AweSearch Logo"
-              boxSize="100px"
-              padding={4}
+              boxSize={isMobile ? '60px' : '100px'}
+              padding={isMobile ? 2 : 4}
             />
           </Box>
         </motion.div>
@@ -101,12 +110,13 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
               bg={cardBg}
               color={textColor}
               borderRadius="md"
-              p={6}
+              p={isMobile ? 4 : 6}
               boxShadow={`0 4px 6px ${shadowColor}`}
-              maxWidth="400px"
+              maxWidth={isMobile ? '300px' : '400px'}
+              width="100%"
               textAlign="center"
             >
-              <Text fontSize="lg">{currentTip}</Text>
+              <Text fontSize={isMobile ? 'md' : 'lg'}>{currentTip}</Text>
             </Box>
           </motion.div>
         </AnimatePresence>
