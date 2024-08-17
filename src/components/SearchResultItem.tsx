@@ -23,9 +23,12 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
     '/src/assets/logo-dark.png',
   );
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const cardBg = useColorModeValue('white', 'gray.700');
+  const brandBlue = useColorModeValue('#000080', '#F0F8FF');
+  const brandPink = '#FF69B4';
 
   return (
-    <Box borderWidth={1} borderRadius="lg" p={4}>
+    <Box borderWidth={1} borderRadius="lg" p={6} bg={cardBg} boxShadow="md">
       <Flex
         direction={isMobile ? 'column' : 'row'}
         alignItems={isMobile ? 'center' : 'flex-start'}
@@ -39,20 +42,23 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
         />
         <VStack
           align={isMobile ? 'center' : 'flex-start'}
-          ml={isMobile ? 0 : 4}
-          spacing={2}
+          ml={isMobile ? 0 : 6}
+          spacing={3}
           width="100%"
         >
           <Heading
             as="h2"
             size={isMobile ? 'md' : 'lg'}
             textAlign={isMobile ? 'center' : 'left'}
+            color={brandBlue}
           >
             {result.name}
           </Heading>
           <Text
             fontSize={isMobile ? 'sm' : 'md'}
             textAlign={isMobile ? 'center' : 'left'}
+            color={brandPink}
+            fontWeight="bold"
           >
             Score: {result.score}
           </Text>
@@ -68,6 +74,8 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
             state={{ analysis: result.analysis }}
             width={isMobile ? '100%' : 'auto'}
             size={isMobile ? 'sm' : 'md'}
+            colorScheme="pink"
+            mt={2}
           >
             View Details
           </Button>

@@ -10,8 +10,9 @@ import {
 import ColorModeToggle from './ColorModeToggle';
 
 const Header: React.FC = () => {
-  const bgColor = useColorModeValue('gray.100', 'gray.800');
-  const textColor = useColorModeValue('gray.800', 'gray.200');
+  const bgColor = useColorModeValue('gray.50', 'gray.800');
+  const textColor = useColorModeValue('#000080', '#F0F8FF'); // brandBlue
+  const brandPink = '#FF69B4';
 
   const logoSrc = useColorModeValue(
     '/src/assets/logo-light.png',
@@ -19,18 +20,21 @@ const Header: React.FC = () => {
   );
 
   return (
-    <Box as="header" bg={bgColor} py={2}>
+    <Box as="header" bg={bgColor} py={3} boxShadow="sm">
       <Flex maxW="container.xl" mx="auto" alignItems="center" px={4}>
         <Flex alignItems="center">
           <Image
             src={logoSrc}
             alt={'awesearch logo'}
-            boxSize="100px"
+            boxSize="80px"
             objectFit="contain"
             mr={4}
           />
           <Heading as="h3" size="md" fontWeight="normal" color={textColor}>
-            awesomeness curated,
+            <Box as="span" color={brandPink}>
+              awesomeness
+            </Box>{' '}
+            curated,
             <br />
             development accelerated
           </Heading>
