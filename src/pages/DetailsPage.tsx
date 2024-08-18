@@ -114,7 +114,7 @@ const DetailsPage: React.FC = () => {
           <CardBody>
             <Flex
               direction={isMobile ? 'column' : 'row'}
-              align="start"
+              align={isMobile ? 'center' : 'start'}
               justify="space-between"
               wrap="wrap"
             >
@@ -123,6 +123,7 @@ const DetailsPage: React.FC = () => {
                 align={isMobile ? 'center' : 'start'}
                 mb={isMobile ? 4 : 0}
                 minW={isMobile ? 'auto' : '200px'}
+                width={isMobile ? '100%' : 'auto'}
               >
                 <Image
                   src={selectedTool.logo || logoSrc}
@@ -131,7 +132,12 @@ const DetailsPage: React.FC = () => {
                   objectFit="contain"
                   mb={4}
                 />
-                <HStack spacing={2} mt={2}>
+                <HStack
+                  spacing={2}
+                  mt={2}
+                  justify={isMobile ? 'center' : 'flex-start'}
+                  width="100%"
+                >
                   <Badge
                     colorScheme={selectedTool.open_source ? 'green' : 'red'}
                     fontSize="md"
@@ -150,15 +156,25 @@ const DetailsPage: React.FC = () => {
                   </Badge>
                 </HStack>
               </Flex>
-              <VStack align="start" flex={1} ml={isMobile ? 0 : 8} spacing={4}>
+              <VStack
+                align={isMobile ? 'center' : 'start'}
+                flex={1}
+                ml={isMobile ? 0 : 8}
+                spacing={4}
+                width={isMobile ? '100%' : 'auto'}
+              >
                 <Heading
                   as="h1"
                   size={isMobile ? 'xl' : '2xl'}
                   color={brandBlue}
+                  textAlign={isMobile ? 'center' : 'left'}
                 >
                   {selectedTool.name}
                 </Heading>
-                <HStack>
+                <HStack
+                  justify={isMobile ? 'center' : 'flex-start'}
+                  width="100%"
+                >
                   <Link
                     href={selectedTool.url}
                     isExternal
