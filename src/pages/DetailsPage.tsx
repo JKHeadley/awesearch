@@ -34,22 +34,15 @@ import {
   InfoIcon,
 } from '@chakra-ui/icons';
 import LoadingOverlay from '../components/LoadingOverlay';
-import { getToolDetails } from '../api/search';
+import { getToolDetails, ToolTag } from '../api/search';
 import { useStore } from '../store/store';
-
-interface Tag {
-  _id: string;
-  name: string;
-  displayName: string;
-  toolCount: number;
-}
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { selectedTool, setSelectedTool, isLoading, setIsLoading } = useStore();
   const location = useLocation();
   const [copied, setCopied] = useState(false);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<ToolTag[]>([]);
 
   // Brand color scheme
   const brandPink = '#FF69B4'; // Adjust this to match your exact pink
@@ -209,34 +202,36 @@ const DetailsPage: React.FC = () => {
         </Card>
 
         <Accordion allowMultiple defaultIndex={[0]}>
-          <AccordionItem>
-            <h2>
-              <AccordionButton
-                bg={accordionBgColor}
-                _hover={{ bg: accordionBgColor }}
-              >
-                <Box flex="1" textAlign="left">
-                  <Heading
-                    as="h2"
-                    size={isMobile ? 'lg' : 'xl'}
-                    color={accordionColor}
-                  >
-                    AI Analysis
-                  </Heading>
-                </Box>
-                <AccordionIcon color={accordionColor} />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4} bg={cardBgColor}>
-              <Text
-                fontSize={isMobile ? 'md' : 'lg'}
-                lineHeight="tall"
-                color={textColor}
-              >
-                {analysisFromState || selectedTool.analysis}
-              </Text>
-            </AccordionPanel>
-          </AccordionItem>
+          {analysisFromState || selectedTool.analysis ? (
+            <AccordionItem>
+              <h2>
+                <AccordionButton
+                  bg={accordionBgColor}
+                  _hover={{ bg: accordionBgColor }}
+                >
+                  <Box flex="1" textAlign="left">
+                    <Heading
+                      as="h2"
+                      size={isMobile ? 'lg' : 'xl'}
+                      color={accordionColor}
+                    >
+                      AI Analysis
+                    </Heading>
+                  </Box>
+                  <AccordionIcon color={accordionColor} />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4} bg={cardBgColor}>
+                <Text
+                  fontSize={isMobile ? 'md' : 'lg'}
+                  lineHeight="tall"
+                  color={textColor}
+                >
+                  {analysisFromState || selectedTool.analysis}
+                </Text>
+              </AccordionPanel>
+            </AccordionItem>
+          ) : null}
 
           <AccordionItem>
             <h2>

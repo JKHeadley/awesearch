@@ -12,10 +12,12 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { searchToolsByKeyword, SearchResult } from '../api/search';
-import SearchResultItem from '../components/SearchResultItem';
+import KeywordToolResultItem from '../components/KeywordToolResultItem';
+import { ToolTag } from '../api/search';
 
 const KeywordToolsPage: React.FC = () => {
   const { keyword } = useParams<{ keyword: string }>();
+  const [tag, setTag] = useState<ToolTag | null>(null);
   const [tools, setTools] = useState<SearchResult[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -32,9 +34,13 @@ const KeywordToolsPage: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await searchToolsByKeyword(keyword!, currentPage);
-        setTools(response.docs);
-        setTotalPages(response.pages.total);
+        const { tools, tag } = await searchToolsByKeyword(
+          keyword!,
+          currentPage,
+        );
+        setTools(tools.docs);
+        setTotalPages(tools.pages.total);
+        setTag(tag);
       } catch (err) {
         setError('Failed to fetch tools. Please try again.');
         console.error(err);
@@ -54,7 +60,7 @@ const KeywordToolsPage: React.FC = () => {
     <Box maxW="container.xl" mx="auto" px={4} py={8} bg={bgColor} minH="100vh">
       <VStack spacing={8} align="stretch">
         <Heading as="h1" size="2xl" color={brandBlue} textAlign="center">
-          Tools Tagged with "{keyword}"
+          Tools: {tag?.displayName}
         </Heading>
 
         {isLoading && (
@@ -71,7 +77,7 @@ const KeywordToolsPage: React.FC = () => {
           <>
             <VStack spacing={6} align="stretch">
               {tools.map((tool) => (
-                <SearchResultItem key={tool.id} result={tool} />
+                <KeywordToolResultItem key={tool.id} tool={tool} />
               ))}
             </VStack>
 

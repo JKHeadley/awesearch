@@ -30,6 +30,13 @@ export interface ToolDetails extends SearchResult {
   tags: any[];
 }
 
+export interface ToolTag {
+  _id: string;
+  name: string;
+  displayName: string;
+  toolCount: number;
+}
+
 export interface PaginatedResponse<T> {
   docs: T[];
   pages: {
@@ -52,7 +59,7 @@ export const searchToolsByKeyword = async (
   keyword: string,
   page: number = 1,
   pageSize: number = 10,
-): Promise<PaginatedResponse<SearchResult>> => {
+): Promise<{ tools: PaginatedResponse<SearchResult>; tag: ToolTag }> => {
   try {
     const tag = await axios.get(`${API_URL}/tag?name=${keyword}`);
     const tagId = tag.data.docs[0]._id;
@@ -62,7 +69,7 @@ export const searchToolsByKeyword = async (
     const response = await axios.get(`${API_URL}/tag/${tagId}/tools`, {
       params: { $limit: pageSize, $page: page },
     });
-    return response.data;
+    return { tools: response.data, tag: tag.data.docs[0] };
   } catch (error) {
     console.error('Error fetching tools by keyword:', error);
     throw error;
