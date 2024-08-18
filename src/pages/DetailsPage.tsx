@@ -37,11 +37,19 @@ import LoadingOverlay from '../components/LoadingOverlay';
 import { getToolDetails } from '../api/search';
 import { useStore } from '../store/store';
 
+interface Tag {
+  _id: string;
+  name: string;
+  displayName: string;
+  toolCount: number;
+}
+
 const DetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { selectedTool, setSelectedTool, isLoading, setIsLoading } = useStore();
   const location = useLocation();
   const [copied, setCopied] = useState(false);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   // Brand color scheme
   const brandPink = '#FF69B4'; // Adjust this to match your exact pink
@@ -66,6 +74,8 @@ const DetailsPage: React.FC = () => {
         setIsLoading(true);
         try {
           const details = await getToolDetails(id);
+          const toolTags = details.tags.flatMap((tag) => tag.tag);
+          setTags(toolTags);
           setSelectedTool(details);
         } catch (error) {
           console.error('Error fetching tool details:', error);
@@ -385,7 +395,7 @@ const DetailsPage: React.FC = () => {
               Keywords
             </Heading>
             <Box>
-              {selectedTool.keywords.map((keyword, index) => (
+              {tags.map((tag, index) => (
                 <Tag
                   key={index}
                   size={isMobile ? 'sm' : 'md'}
@@ -395,7 +405,7 @@ const DetailsPage: React.FC = () => {
                   m={1}
                   _hover={{ bg: brandPink, color: 'white' }}
                 >
-                  {keyword}
+                  {tag.displayName}
                 </Tag>
               ))}
             </Box>

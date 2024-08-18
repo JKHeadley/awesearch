@@ -27,6 +27,7 @@ export interface ToolDetails extends SearchResult {
     class: string;
     open_source: boolean;
     free: boolean;
+    tags: any[];
 }
 
 // Function to search the database
@@ -45,7 +46,7 @@ export const searchDatabase = async (query: string): Promise<SearchResult[]> => 
 // Function to get details of a specific tool
 export const getToolDetails = async (id: string): Promise<ToolDetails> => {
     try {
-        const response = await axios.get(`${API_URL}/tool/${id}`);
+        const response = await axios.get(`${API_URL}/tool/${id}?$embed=tags`);
         return response.data;
     } catch (error) {
         console.error('Error fetching tool details:', error);
