@@ -18,6 +18,7 @@ interface SearchResultItemProps {
 }
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
+  const { setSelectedTool, setIsLoading } = useStore();
   const logoSrc = useColorModeValue(
     import.meta.env.VITE_LOGO_LIGHT_URL,
     import.meta.env.VITE_LOGO_DARK_URL,
@@ -76,6 +77,11 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
             size={isMobile ? 'sm' : 'md'}
             colorScheme="pink"
             mt={2}
+            // onclick set tool to null and loading to true
+            onCanPlay={() => {
+              setSelectedTool(null);
+              setIsLoading(true);
+            }}
           >
             View Details
           </Button>

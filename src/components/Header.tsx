@@ -19,8 +19,6 @@ const Header: React.FC = () => {
     import.meta.env.VITE_LOGO_LIGHT_URL,
   );
 
-  console.log(logoSrc);
-
   return (
     <Box as="header" bg={bgColor} py={3} boxShadow="sm">
       <Flex maxW="container.xl" mx="auto" alignItems="center" px={4}>
