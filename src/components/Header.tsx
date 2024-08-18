@@ -15,9 +15,11 @@ const Header: React.FC = () => {
   const brandPink = '#FF69B4';
 
   const logoSrc = useColorModeValue(
-    '/src/assets/logo-light.png',
-    '/src/assets/logo-dark.png',
+    import.meta.env.VITE_LOGO_DARK_URL,
+    import.meta.env.VITE_LOGO_LIGHT_URL,
   );
+
+  console.log(logoSrc);
 
   return (
     <Box as="header" bg={bgColor} py={3} boxShadow="sm">
