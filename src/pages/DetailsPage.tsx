@@ -404,6 +404,8 @@ const DetailsPage: React.FC = () => {
                   cursor="pointer"
                   m={1}
                   _hover={{ bg: brandPink, color: 'white' }}
+                  as={RouterLink}
+                  to={`/keyword/${encodeURIComponent(tag.name)}`}
                 >
                   {tag.displayName}
                 </Tag>
