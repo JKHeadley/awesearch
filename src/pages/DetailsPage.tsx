@@ -323,6 +323,18 @@ const DetailsPage: React.FC = () => {
                     {selectedTool.intended_use}
                   </Text>
                 </GridItem>
+                <GridItem colSpan={isMobile ? 1 : 2}>
+                  <Heading as="h3" size="md" mb={2} color={brandBlue}>
+                    Intended Audience
+                  </Heading>
+                  <Text
+                    fontSize={isMobile ? 'sm' : 'md'}
+                    lineHeight="tall"
+                    color={textColor}
+                  >
+                    {selectedTool.intended_audience}
+                  </Text>
+                </GridItem>
               </Grid>
             </AccordionPanel>
           </AccordionItem>
