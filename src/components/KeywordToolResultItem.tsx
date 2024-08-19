@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useStore } from '../store/store';
-import ReactGA from 'react-ga4';
+import { ReactGAEvent } from '../utils/react-ga-event';
 
 interface KeywordToolResultItemProps {
   tool: any;
@@ -39,7 +39,8 @@ const KeywordToolResultItem: React.FC<KeywordToolResultItemProps> = ({
 
   const handleExternalLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    ReactGA.event({
+
+    ReactGAEvent({
       category: 'Tool',
       action: 'External Link Click',
       label: tool.url,
@@ -75,7 +76,7 @@ const KeywordToolResultItem: React.FC<KeywordToolResultItemProps> = ({
               color={brandBlue}
               _hover={{ textDecoration: 'underline' }}
               onClick={() => {
-                ReactGA.event({
+                ReactGAEvent({
                   category: 'Tool',
                   action: 'View Details',
                   label: tool.url,
@@ -112,7 +113,7 @@ const KeywordToolResultItem: React.FC<KeywordToolResultItemProps> = ({
             colorScheme="pink"
             mt={2}
             onClick={() => {
-              ReactGA.event({
+              ReactGAEvent({
                 category: 'Tool',
                 action: 'View Details from Keyword Search',
                 label: tool.url,

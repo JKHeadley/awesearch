@@ -21,6 +21,7 @@ import { searchDatabase } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
 import ReactGA from 'react-ga4';
+import { ReactGAEvent } from '../utils/react-ga-event';
 import AboutModal from '../components/AboutModal';
 
 const SearchPage: React.FC = () => {
@@ -34,6 +35,7 @@ const SearchPage: React.FC = () => {
   } = useStore();
   const [placeholder, setPlaceholder] = useState('');
   const [isPlaceholder, setIsPlaceholder] = useState(true);
+  const [privacyConsent, setPrivacyConsent] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -54,7 +56,7 @@ const SearchPage: React.FC = () => {
           isClosable: true,
         });
 
-        ReactGA.event({
+        ReactGAEvent({
           category: 'Search',
           action: 'Copy Query',
           label: isPlaceholder ? placeholder : query,
@@ -81,6 +83,17 @@ const SearchPage: React.FC = () => {
   }, [query]);
 
   useEffect(() => {
+    const consent = localStorage.getItem('privacyConsent');
+    setPrivacyConsent(consent);
+    if (consent === 'true' && !query) {
+      const randomQuery = getRandomQuery();
+      setPlaceholder(randomQuery);
+      setQuery(randomQuery);
+      setIsPlaceholder(true);
+    }
+  }, [setQuery]);
+
+  useEffect(() => {
     if (!query) {
       const randomQuery = getRandomQuery();
       setPlaceholder(randomQuery);
@@ -92,13 +105,14 @@ const SearchPage: React.FC = () => {
   }, [setQuery]);
 
   const handleSearch = async () => {
-    ReactGA.event({
+    ReactGAEvent({
       category: 'Search',
       action: 'Perform Search',
       label: isPlaceholder ? placeholder : query,
     });
+
     if (isPlaceholder) {
-      ReactGA.event({
+      ReactGAEvent({
         category: 'Search',
         action: 'Perform Example Search',
         label: placeholder,
@@ -134,7 +148,7 @@ const SearchPage: React.FC = () => {
     setQuery(newQuery);
     setIsPlaceholder(true);
 
-    ReactGA.event({
+    ReactGAEvent({
       category: 'Search',
       action: 'Cycle Example Query',
       label: newQuery,
@@ -151,7 +165,7 @@ const SearchPage: React.FC = () => {
       bg={bgColor}
       minH="calc(100vh - 100px)"
     >
-      <AdSense />
+      {privacyConsent === 'true' && <AdSense />}
       <LoadingOverlay isLoading={isLoading} />
       <VStack spacing={6} width="100%">
         <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
@@ -200,10 +214,11 @@ const SearchPage: React.FC = () => {
                   aria-label="About AweSearch"
                   icon={<InfoIcon />}
                   onClick={() => {
-                    ReactGA.event({
+                    ReactGAEvent({
                       category: 'Search',
                       action: 'Open About Modal',
                     });
+
                     onOpen();
                   }}
                   colorScheme="pink"

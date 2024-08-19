@@ -6,7 +6,6 @@ import {
   Link,
   useColorModeValue,
   HStack,
-  VStack,
   Flex,
 } from '@chakra-ui/react';
 
@@ -19,7 +18,7 @@ const PrivacyConsentBanner: React.FC = () => {
 
   useEffect(() => {
     const consent = localStorage.getItem('privacyConsent');
-    if (!consent) {
+    if (consent === null) {
       setShowBanner(true);
     }
   }, []);
@@ -27,13 +26,19 @@ const PrivacyConsentBanner: React.FC = () => {
   const handleAccept = () => {
     localStorage.setItem('privacyConsent', 'true');
     setShowBanner(false);
-    // Enable analytics here
+    window.location.reload(); // Reload to apply changes
   };
 
   const handleReject = () => {
     localStorage.setItem('privacyConsent', 'false');
     setShowBanner(false);
-    // Disable analytics here
+    // Disable analytics and clear any existing data
+    if ((window as any).ga) {
+      window['ga-disable-' + import.meta.env.VITE_GA4_MEASUREMENT_ID] = true;
+    }
+    localStorage.clear(); // Clear all localStorage data
+    sessionStorage.clear(); // Clear all sessionStorage data
+    window.location.reload(); // Reload to apply changes
   };
 
   if (!showBanner) return null;

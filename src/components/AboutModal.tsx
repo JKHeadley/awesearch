@@ -16,7 +16,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import ReactGA from 'react-ga4';
+import { ReactGAEvent } from '../utils/react-ga-event';
 
 interface AboutModalProps {
   isOpen: boolean;
@@ -64,13 +64,13 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
                 href="https://github.com/sindresorhus/awesome"
                 isExternal
                 color={linkColor}
-                onClick={() =>
-                  ReactGA.event({
+                onClick={() => {
+                  ReactGAEvent({
                     category: 'About',
                     action: 'External Link Click',
                     label: 'awesome lists',
-                  })
-                }
+                  });
+                }}
               >
                 awesome lists <ExternalLinkIcon mx="2px" />
               </Link>

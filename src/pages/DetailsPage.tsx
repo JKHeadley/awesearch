@@ -36,7 +36,7 @@ import {
 import LoadingOverlay from '../components/LoadingOverlay';
 import { getToolDetails, ToolTag } from '../api/search';
 import { useStore } from '../store/store';
-import ReactGA from 'react-ga4';
+import { ReactGAEvent } from '../utils/react-ga-event';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,7 +82,7 @@ const DetailsPage: React.FC = () => {
   }, [id, setSelectedTool, setIsLoading]);
 
   const copyToClipboard = (text: string) => {
-    ReactGA.event({
+    ReactGAEvent({
       category: 'Tool',
       action: 'Copy URL',
       label: text,
@@ -190,7 +190,7 @@ const DetailsPage: React.FC = () => {
                     color={brandPink}
                     fontSize={isMobile ? 'md' : 'lg'}
                     onClick={() => {
-                      ReactGA.event({
+                      ReactGAEvent({
                         category: 'Tool',
                         action: 'Visit Website',
                         label: selectedTool.url,
@@ -252,7 +252,7 @@ const DetailsPage: React.FC = () => {
                 bg={accordionBgColor}
                 _hover={{ bg: accordionBgColor }}
                 onClick={() => {
-                  ReactGA.event({
+                  ReactGAEvent({
                     category: 'Tool',
                     action: 'View Summary and Description',
                     label: selectedTool.url,
@@ -307,7 +307,7 @@ const DetailsPage: React.FC = () => {
                 bg={accordionBgColor}
                 _hover={{ bg: accordionBgColor }}
                 onClick={() => {
-                  ReactGA.event({
+                  ReactGAEvent({
                     category: 'Tool',
                     action: 'View Purpose and Use',
                     label: selectedTool.url,
@@ -429,7 +429,7 @@ const DetailsPage: React.FC = () => {
                   as={RouterLink}
                   to={`/keyword/${encodeURIComponent(tag.name)}`}
                   onClick={() => {
-                    ReactGA.event({
+                    ReactGAEvent({
                       category: 'Tool',
                       action: 'Browse by Tag',
                       label: tag.name,
@@ -451,7 +451,7 @@ const DetailsPage: React.FC = () => {
             colorScheme="pink"
             rightIcon={<ExternalLinkIcon />}
             onClick={() => {
-              ReactGA.event({
+              ReactGAEvent({
                 category: 'Tool',
                 action: 'Visit Website',
                 label: selectedTool.url,

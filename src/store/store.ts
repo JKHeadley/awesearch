@@ -10,7 +10,6 @@ interface SearchResult {
   score: number;
   analysis: string;
   summary: string;
-  // Add other fields as needed
 }
 
 interface AppState {
@@ -24,11 +23,16 @@ interface AppState {
   setIsLoading: (isLoading: boolean) => void;
 }
 
-export const useStore = create<AppState>()(
+const useStore = create<AppState>()(
   persist(
     (set) => ({
       query: '',
-      setQuery: (query) => set({ query }),
+      setQuery: (query) => {
+        const consent = localStorage.getItem('privacyConsent');
+        if (consent === 'true') {
+          set({ query });
+        }
+      },
       searchResults: [],
       setSearchResults: (results) => set({ searchResults: results }),
       selectedTool: null,
@@ -38,7 +42,21 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'awesearch-storage',
-      getStorage: () => localStorage,
-    }
-  )
+      getStorage: () => ({
+        getItem: (name) => {
+          const consent = localStorage.getItem('privacyConsent');
+          return consent === 'true' ? localStorage.getItem(name) : null;
+        },
+        setItem: (name, value) => {
+          const consent = localStorage.getItem('privacyConsent');
+          if (consent === 'true') {
+            localStorage.setItem(name, value);
+          }
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      }),
+    },
+  ),
 );
+
+export { useStore };

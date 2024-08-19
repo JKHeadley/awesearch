@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useStore } from '../store/store';
-import ReactGA from 'react-ga4';
+import { ReactGAEvent } from '../utils/react-ga-event';
 import { ToolDetails } from '../api/search';
 
 interface SearchResultItemProps {
@@ -37,7 +37,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
 
   const handleExternalLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    ReactGA.event({
+    ReactGAEvent({
       category: 'Tool',
       action: 'External Link Click',
       label: result.url,
@@ -73,7 +73,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
               color={brandBlue}
               _hover={{ textDecoration: 'underline' }}
               onClick={() => {
-                ReactGA.event({
+                ReactGAEvent({
                   category: 'Tool',
                   action: 'View Details',
                   label: result.url,
@@ -118,7 +118,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
             colorScheme="pink"
             mt={2}
             onClick={() => {
-              ReactGA.event({
+              ReactGAEvent({
                 category: 'Tool',
                 action: 'View Details',
                 label: result.url,
