@@ -1,3 +1,10 @@
 [build]
-command = "tsc --noEmit || true && vite build"
-publish = "dist"
+    command = "tsc --noEmit || true && vite build"
+    publish = "dist"
+    functions = "netlify/functions"
+
+
+[[redirects]]
+    from = "/ads.txt"
+    to = "/.netlify/functions/ads-txt"
+    status = 200
