@@ -10,8 +10,9 @@ import {
   useColorModeValue,
   IconButton,
   Tooltip,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { RepeatIcon, CopyIcon } from '@chakra-ui/icons';
+import { RepeatIcon, CopyIcon, InfoIcon } from '@chakra-ui/icons';
 import { useToast } from '@chakra-ui/react';
 import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -20,6 +21,7 @@ import { searchDatabase } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
 import ReactGA from 'react-ga4';
+import AboutModal from '../components/AboutModal';
 
 const SearchPage: React.FC = () => {
   const {
@@ -32,6 +34,7 @@ const SearchPage: React.FC = () => {
   } = useStore();
   const [placeholder, setPlaceholder] = useState('');
   const [isPlaceholder, setIsPlaceholder] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const bgColor = useColorModeValue('gray.50', 'gray.800');
@@ -126,7 +129,7 @@ const SearchPage: React.FC = () => {
       mx="auto"
       pb={16}
       mt={8}
-      px={{ base: 4, md: 8, lg: 16 }} // Increased padding for larger screens
+      px={{ base: 4, md: 8, lg: 16 }}
       bg={bgColor}
       minH="calc(100vh - 100px)"
     >
@@ -170,27 +173,41 @@ const SearchPage: React.FC = () => {
                   onClick={handleCopy}
                   colorScheme="pink"
                   size={isMobile ? 'sm' : 'md'}
-                  isDisabled={!(isPlaceholder ? placeholder : query).trim()} // Disable when empty
+                  isDisabled={!(isPlaceholder ? placeholder : query).trim()}
                 />
+              </Tooltip>
+
+              <Tooltip label="Learn more about AweSearch">
+                <IconButton
+                  aria-label="About AweSearch"
+                  icon={<InfoIcon />}
+                  onClick={onOpen}
+                  colorScheme="pink"
+                  size={isMobile ? 'sm' : 'md'}
+                >
+                </IconButton>
               </Tooltip>
             </HStack>
           </VStack>
         </HStack>
-        <Button
-          onClick={handleSearch}
-          isLoading={isLoading}
-          width={isMobile ? '100%' : 'auto'}
-          size={isMobile ? 'md' : 'lg'}
-          colorScheme="pink"
-        >
-          Search
-        </Button>
+        <HStack width="100%" justifyContent="center" spacing={4}>
+          <Button
+            onClick={handleSearch}
+            isLoading={isLoading}
+            width={isMobile ? '100%' : 'auto'}
+            size={isMobile ? 'md' : 'lg'}
+            colorScheme="pink"
+          >
+            Search
+          </Button>
+        </HStack>
         <Text fontSize="sm" color="gray.500">
           Click Search to try the example query, or modify it for your specific
           needs. Use the refresh button to try another example.
         </Text>
         <SearchResults results={searchResults} />
       </VStack>
+      <AboutModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };
