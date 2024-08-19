@@ -32,22 +32,24 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <Router>
-        <AdSenseInitializer />
-        <GoogleAnalytics>
-          <ScrollToTop />
-          <Header />
-          <Routes>
-            <Route path="/" element={<SearchPage />} />
-            <Route path="/details/:id" element={<DetailsPage />} />
-            <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </GoogleAnalytics>
-      </Router>
-    </ChakraProvider>
+    <>
+      <AdSenseInitializer />
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <Router>
+          <GoogleAnalytics>
+            <ScrollToTop />
+            <Header />
+            <Routes>
+              <Route path="/" element={<SearchPage />} />
+              <Route path="/details/:id" element={<DetailsPage />} />
+              <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </GoogleAnalytics>
+        </Router>
+      </ChakraProvider>
+    </>
   );
 };
 
