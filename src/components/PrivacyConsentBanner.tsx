@@ -35,14 +35,6 @@ const PrivacyConsentBanner: React.FC = () => {
       analytics_storage: 'granted',
     });
 
-    // Load Google tag script
-    const gtagScript = document.createElement('script');
-    gtagScript.async = true;
-    gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${
-      import.meta.env.VITE_GA4_MEASUREMENT_ID
-    }`;
-    document.head.appendChild(gtagScript);
-
     // Reload the page to ensure all components respect the new consent state
     window.location.reload();
   };
