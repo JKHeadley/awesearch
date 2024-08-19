@@ -103,7 +103,7 @@ const DetailsPage: React.FC = () => {
           selectedTool.summary ||
           `Learn more about ${selectedTool.name} and how it can help your development process.`
         }
-        image={selectedTool.logo || 'https://awesearch.app/og-image.jpg'} // Use tool logo if available, otherwise default
+        image={selectedTool.logo || import.meta.env.OG_IMAGE_URL} // Use tool logo if available, otherwise default
         url={`https://awesearch.app/details/${id}`}
       />
       <Box

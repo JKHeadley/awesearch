@@ -161,7 +161,7 @@ const SearchPage: React.FC = () => {
       <MetaTags
         title="AweSearch - Find the Perfect Development Tools"
         description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search."
-        image="https://awesearch.app/og-image.jpg" // Replace with your actual OG image URL
+        image={import.meta.env.OG_IMAGE_URL} // Replace with your actual OG image URL
         url="https://awesearch.app"
       />
       <Box
