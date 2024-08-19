@@ -13,24 +13,6 @@ import AdSenseInitializer from './components/AdSenseInitializer';
 import theme from './theme';
 
 const App: React.FC = () => {
-  useEffect(() => {
-    if (import.meta.env.VITE_ADSENSE_CLIENT) {
-      const script = document.createElement('script');
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
-        import.meta.env.VITE_ADSENSE_CLIENT
-      }`;
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      document.head.appendChild(script);
-
-      // Enable Auto Ads
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({
-        google_ad_client: import.meta.env.VITE_ADSENSE_CLIENT,
-        enable_page_level_ads: true,
-      });
-    }
-  }, []);
-
   return (
     <>
       <AdSenseInitializer />
