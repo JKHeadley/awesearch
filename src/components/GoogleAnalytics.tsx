@@ -11,7 +11,6 @@ const GoogleAnalytics: React.FC<{ children: React.ReactNode }> = ({
     const initGA = () => {
       const consent = localStorage.getItem('privacyConsent');
       if (consent === 'true') {
-        console.log('GA ID: ', import.meta.env.VITE_GA4_MEASUREMENT_ID);
 
         // Load Google tag script
         const gtagScript = document.createElement('script');
