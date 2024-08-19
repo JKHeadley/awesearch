@@ -18,6 +18,7 @@ import LoadingOverlay from '../components/LoadingOverlay';
 import { searchDatabase } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
+import ReactGA from 'react-ga4';
 
 const SearchPage: React.FC = () => {
   const {
@@ -82,6 +83,11 @@ const SearchPage: React.FC = () => {
   }, [setQuery]);
 
   const handleSearch = async () => {
+    ReactGA.event({
+      category: 'Search',
+      action: query,
+      label: 'query',
+    });
     setIsLoading(true);
     try {
       const results = await searchDatabase(isPlaceholder ? placeholder : query);
