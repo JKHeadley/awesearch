@@ -19,9 +19,10 @@ interface SearchResultItemProps {
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   const { setSelectedTool, setIsLoading } = useStore();
+  
   const logoSrc = useColorModeValue(
-    import.meta.env.VITE_LOGO_LIGHT_URL,
     import.meta.env.VITE_LOGO_DARK_URL,
+    import.meta.env.VITE_LOGO_LIGHT_URL,
   );
   const isMobile = useBreakpointValue({ base: true, md: false });
   const cardBg = useColorModeValue('white', 'gray.700');

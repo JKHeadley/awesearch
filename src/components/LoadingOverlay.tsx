@@ -39,8 +39,8 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
   }, [isMainTip]);
 
   const logoSrc = useColorModeValue(
-    import.meta.env.VITE_LOGO_LIGHT_URL,
     import.meta.env.VITE_LOGO_DARK_URL,
+    import.meta.env.VITE_LOGO_LIGHT_URL,
   );
 
   // Color mode values

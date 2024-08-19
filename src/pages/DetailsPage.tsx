@@ -54,8 +54,8 @@ const DetailsPage: React.FC = () => {
   const accordionColor = useColorModeValue(brandBlue, brandPink);
 
   const logoSrc = useColorModeValue(
-    import.meta.env.VITE_LOGO_LIGHT_URL,
     import.meta.env.VITE_LOGO_DARK_URL,
+    import.meta.env.VITE_LOGO_LIGHT_URL,
   );
   const isMobile = useBreakpointValue({ base: true, md: false });
 
