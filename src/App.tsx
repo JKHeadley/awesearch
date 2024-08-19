@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ChakraProvider, ColorModeScript, Box, Flex } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -15,6 +15,15 @@ import PrivacyConsentBanner from './components/PrivacyConsentBanner';
 import theme from './theme';
 
 const App: React.FC = () => {
+  const [showConsentBanner, setShowConsentBanner] = useState(false);
+
+  useEffect(() => {
+    const consent = localStorage.getItem('privacyConsent');
+    if (consent === null) {
+      setShowConsentBanner(true);
+    }
+  }, []);
+
   return (
     <HelmetProvider>
       <ChakraProvider theme={theme}>
@@ -22,26 +31,16 @@ const App: React.FC = () => {
         <Router>
           <GoogleAnalytics>
             <ScrollToTop />
-            <Flex flexDirection="column" minHeight="100vh">
-              <Header />
-              <Box flex="1">
-                <Routes>
-                  <Route path="/" element={<SearchPage />} />
-                  <Route path="/details/:id" element={<DetailsPage />} />
-                  <Route
-                    path="/keyword/:keyword"
-                    element={<KeywordToolsPage />}
-                  />
-                  <Route
-                    path="/privacy-policy"
-                    element={<PrivacyPolicyPage />}
-                  />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Box>
-              <Footer />
-            </Flex>
-            <PrivacyConsentBanner />
+            <Header />
+            <Routes>
+              <Route path="/" element={<SearchPage />} />
+              <Route path="/details/:id" element={<DetailsPage />} />
+              <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+            <Footer />
+            {showConsentBanner && <PrivacyConsentBanner />}
           </GoogleAnalytics>
         </Router>
       </ChakraProvider>

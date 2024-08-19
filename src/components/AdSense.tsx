@@ -9,7 +9,13 @@ const AdSense: React.FC<AdSenseProps> = ({ style, adSlot }) => {
   const adRef = useRef<any>(null);
 
   useEffect(() => {
-    if (import.meta.env.PROD && adRef.current && (window as any).adsbygoogle) {
+    const consent = localStorage.getItem('privacyConsent');
+    if (
+      import.meta.env.PROD &&
+      consent === 'true' &&
+      adRef.current &&
+      (window as any).adsbygoogle
+    ) {
       try {
         ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push(
           {},
@@ -35,6 +41,11 @@ const AdSense: React.FC<AdSenseProps> = ({ style, adSlot }) => {
         AdSense Placeholder
       </div>
     );
+  }
+
+  const consent = localStorage.getItem('privacyConsent');
+  if (consent !== 'true') {
+    return null; // Don't render ad if consent is not given
   }
 
   return (

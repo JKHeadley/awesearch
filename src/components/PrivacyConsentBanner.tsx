@@ -26,17 +26,30 @@ const PrivacyConsentBanner: React.FC = () => {
   const handleAccept = () => {
     localStorage.setItem('privacyConsent', 'true');
     setShowBanner(false);
+    (window as any).gtag('consent', 'update', {
+      ad_storage: 'granted',
+      analytics_storage: 'granted',
+    });
     window.location.reload(); // Reload to apply changes
   };
 
   const handleReject = () => {
     localStorage.setItem('privacyConsent', 'false');
     setShowBanner(false);
-    // Disable analytics and clear any existing data
+    (window as any).gtag('consent', 'update', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+    });
+    // Disable analytics
     if ((window as any).ga) {
       window['ga-disable-' + import.meta.env.VITE_GA4_MEASUREMENT_ID] = true;
     }
-    localStorage.clear(); // Clear all localStorage data
+    // Clear all localStorage data except for the consent status
+    Object.keys(localStorage).forEach((key) => {
+      if (key !== 'privacyConsent') {
+        localStorage.removeItem(key);
+      }
+    });
     sessionStorage.clear(); // Clear all sessionStorage data
     window.location.reload(); // Reload to apply changes
   };

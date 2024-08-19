@@ -12,9 +12,19 @@ const GoogleAnalytics: React.FC<{ children: React.ReactNode }> = ({
       const consent = localStorage.getItem('privacyConsent');
       if (consent === 'true') {
         ReactGA.initialize(import.meta.env.VITE_GA4_MEASUREMENT_ID);
+        // Update consent state
+        (window as any).gtag('consent', 'update', {
+          ad_storage: 'granted',
+          analytics_storage: 'granted',
+        });
       } else if (consent === 'false') {
         // Disable GA
         window['ga-disable-' + import.meta.env.VITE_GA4_MEASUREMENT_ID] = true;
+        // Update consent state
+        (window as any).gtag('consent', 'update', {
+          ad_storage: 'denied',
+          analytics_storage: 'denied',
+        });
       }
     };
 
