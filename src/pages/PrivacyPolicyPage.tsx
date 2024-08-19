@@ -8,9 +8,13 @@ import {
   ListItem,
   Link,
   useColorModeValue,
+  Button,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 
 const PrivacyPolicyPage: React.FC = () => {
+  const navigate = useNavigate();
   const bgColor = useColorModeValue('gray.50', 'gray.800');
   const textColor = useColorModeValue('gray.700', 'gray.200');
   const headingColor = useColorModeValue('#000080', '#F0F8FF'); // brandBlue
@@ -19,6 +23,17 @@ const PrivacyPolicyPage: React.FC = () => {
   return (
     <Box maxW="container.xl" mx="auto" p={8} bg={bgColor} minH="100vh">
       <VStack spacing={6} align="stretch">
+        <Button
+          leftIcon={<ChevronLeftIcon />}
+          onClick={() => navigate(-1)}
+          alignSelf="flex-start"
+          mb={4}
+          colorScheme="pink"
+          variant="outline"
+        >
+          Back
+        </Button>
+
         <Heading as="h1" size="2xl" color={headingColor}>
           Privacy Policy
         </Heading>
@@ -132,7 +147,7 @@ const PrivacyPolicyPage: React.FC = () => {
           If you have any questions about this Privacy Policy, please contact us
           at:{' '}
           <Link href="mailto:justin@inkwell-ai.com" color={brandPink}>
-          justin@inkwell-ai.com
+            justin@inkwell-ai.com
           </Link>
         </Text>
       </VStack>

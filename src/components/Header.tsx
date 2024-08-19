@@ -6,7 +6,9 @@ import {
   Heading,
   Spacer,
   useColorModeValue,
+  Link,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 import ColorModeToggle from './ColorModeToggle';
 
 const Header: React.FC = () => {
@@ -23,21 +25,23 @@ const Header: React.FC = () => {
     <Box as="header" bg={bgColor} py={3} boxShadow="sm">
       <Flex maxW="container.xl" mx="auto" alignItems="center" px={4}>
         <Flex alignItems="center">
-          <Image
-            src={logoSrc}
-            alt={'awesearch logo'}
-            boxSize="80px"
-            objectFit="contain"
-            mr={4}
-          />
-          <Heading as="h3" size="md" fontWeight="normal" color={textColor}>
-            <Box as="span" color={brandPink}>
-              awesomeness
-            </Box>{' '}
-            curated,
-            <br />
-            development accelerated
-          </Heading>
+          <Link as={RouterLink} to="/" display="flex" alignItems="center">
+            <Image
+              src={logoSrc}
+              alt={'awesearch logo'}
+              boxSize="80px"
+              objectFit="contain"
+              mr={4}
+            />
+            <Heading as="h3" size="md" fontWeight="normal" color={textColor}>
+              <Box as="span" color={brandPink}>
+                awesomeness
+              </Box>{' '}
+              curated,
+              <br />
+              development accelerated
+            </Heading>
+          </Link>
         </Flex>
         <Spacer />
         <ColorModeToggle />
