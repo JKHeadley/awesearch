@@ -11,6 +11,7 @@ const GoogleAnalytics: React.FC<{ children: React.ReactNode }> = ({
     const initGA = () => {
       const consent = localStorage.getItem('privacyConsent');
       if (consent === 'true') {
+        console.log('GA ID: ', import.meta.env.VITE_GA4_MEASUREMENT_ID);
         ReactGA.initialize(import.meta.env.VITE_GA4_MEASUREMENT_ID);
         // Update consent state
         (window as any).gtag('consent', 'update', {
