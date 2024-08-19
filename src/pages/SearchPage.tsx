@@ -42,7 +42,6 @@ const SearchPage: React.FC = () => {
   const brandBlue = useColorModeValue('#000080', '#F0F8FF');
 
   const toast = useToast();
-
   const handleCopy = () => {
     navigator.clipboard
       .writeText(isPlaceholder ? placeholder : query)
@@ -53,6 +52,12 @@ const SearchPage: React.FC = () => {
           status: 'success',
           duration: 2000,
           isClosable: true,
+        });
+
+        ReactGA.event({
+          category: 'Search',
+          action: 'Copy Query',
+          label: isPlaceholder ? placeholder : query,
         });
       })
       .catch((err) => {
@@ -89,9 +94,16 @@ const SearchPage: React.FC = () => {
   const handleSearch = async () => {
     ReactGA.event({
       category: 'Search',
-      action: query,
-      label: 'query',
+      action: 'Perform Search',
+      label: isPlaceholder ? placeholder : query,
     });
+    if (isPlaceholder) {
+      ReactGA.event({
+        category: 'Search',
+        action: 'Perform Example Search',
+        label: placeholder,
+      });
+    }
     setIsLoading(true);
     try {
       const results = await searchDatabase(isPlaceholder ? placeholder : query);
@@ -121,6 +133,12 @@ const SearchPage: React.FC = () => {
     setPlaceholder(newQuery);
     setQuery(newQuery);
     setIsPlaceholder(true);
+
+    ReactGA.event({
+      category: 'Search',
+      action: 'Cycle Example Query',
+      label: newQuery,
+    });
   };
 
   return (
@@ -181,11 +199,16 @@ const SearchPage: React.FC = () => {
                 <IconButton
                   aria-label="About AweSearch"
                   icon={<InfoIcon />}
-                  onClick={onOpen}
+                  onClick={() => {
+                    ReactGA.event({
+                      category: 'Search',
+                      action: 'Open About Modal',
+                    });
+                    onOpen();
+                  }}
                   colorScheme="pink"
                   size={isMobile ? 'sm' : 'md'}
-                >
-                </IconButton>
+                ></IconButton>
               </Tooltip>
             </HStack>
           </VStack>

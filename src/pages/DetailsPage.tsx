@@ -36,6 +36,7 @@ import {
 import LoadingOverlay from '../components/LoadingOverlay';
 import { getToolDetails, ToolTag } from '../api/search';
 import { useStore } from '../store/store';
+import ReactGA from 'react-ga4';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,6 +82,11 @@ const DetailsPage: React.FC = () => {
   }, [id, setSelectedTool, setIsLoading]);
 
   const copyToClipboard = (text: string) => {
+    ReactGA.event({
+      category: 'Tool',
+      action: 'Copy URL',
+      label: text,
+    });
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -183,6 +189,13 @@ const DetailsPage: React.FC = () => {
                     isExternal
                     color={brandPink}
                     fontSize={isMobile ? 'md' : 'lg'}
+                    onClick={() => {
+                      ReactGA.event({
+                        category: 'Tool',
+                        action: 'Visit Website',
+                        label: selectedTool.url,
+                      });
+                    }}
                   >
                     {selectedTool.url} <ExternalLinkIcon mx="2px" />
                   </Link>
@@ -238,6 +251,13 @@ const DetailsPage: React.FC = () => {
               <AccordionButton
                 bg={accordionBgColor}
                 _hover={{ bg: accordionBgColor }}
+                onClick={() => {
+                  ReactGA.event({
+                    category: 'Tool',
+                    action: 'View Summary and Description',
+                    label: selectedTool.url,
+                  });
+                }}
               >
                 <Box flex="1" textAlign="left">
                   <Heading
@@ -286,6 +306,13 @@ const DetailsPage: React.FC = () => {
               <AccordionButton
                 bg={accordionBgColor}
                 _hover={{ bg: accordionBgColor }}
+                onClick={() => {
+                  ReactGA.event({
+                    category: 'Tool',
+                    action: 'View Purpose and Use',
+                    label: selectedTool.url,
+                  });
+                }}
               >
                 <Box flex="1" textAlign="left">
                   <Heading
@@ -401,6 +428,13 @@ const DetailsPage: React.FC = () => {
                   _hover={{ bg: brandPink, color: 'white' }}
                   as={RouterLink}
                   to={`/keyword/${encodeURIComponent(tag.name)}`}
+                  onClick={() => {
+                    ReactGA.event({
+                      category: 'Tool',
+                      action: 'Browse by Tag',
+                      label: tag.name,
+                    });
+                  }}
                 >
                   {tag.displayName}
                 </Tag>
@@ -416,6 +450,13 @@ const DetailsPage: React.FC = () => {
             isExternal
             colorScheme="pink"
             rightIcon={<ExternalLinkIcon />}
+            onClick={() => {
+              ReactGA.event({
+                category: 'Tool',
+                action: 'Visit Website',
+                label: selectedTool.url,
+              });
+            }}
           >
             Visit Website
           </Button>

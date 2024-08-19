@@ -9,17 +9,23 @@ import {
   VStack,
   useColorModeValue,
   useBreakpointValue,
+  Link,
+  Icon,
+  Tooltip,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useStore } from '../store/store';
+import ReactGA from 'react-ga4';
+import { ToolDetails } from '../api/search';
 
 interface SearchResultItemProps {
-  result: any;
+  result: ToolDetails;
 }
 
 const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   const { setSelectedTool, setIsLoading } = useStore();
-  
+
   const logoSrc = useColorModeValue(
     import.meta.env.VITE_LOGO_DARK_URL,
     import.meta.env.VITE_LOGO_LIGHT_URL,
@@ -28,6 +34,15 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
   const brandBlue = useColorModeValue('#000080', '#F0F8FF');
   const brandPink = '#FF69B4';
+
+  const handleExternalLinkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    ReactGA.event({
+      category: 'Tool',
+      action: 'External Link Click',
+      label: result.url,
+    });
+  };
 
   return (
     <Box borderWidth={1} borderRadius="lg" p={6} bg={cardBg} boxShadow="md">
@@ -48,14 +63,38 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
           spacing={3}
           width="100%"
         >
-          <Heading
-            as="h2"
-            size={isMobile ? 'md' : 'lg'}
-            textAlign={isMobile ? 'center' : 'left'}
-            color={brandBlue}
-          >
-            {result.name}
-          </Heading>
+          <Flex alignItems="center">
+            <Heading
+              as={RouterLink}
+              to={`/details/${result._id}`}
+              state={{ analysis: result.analysis }}
+              size={isMobile ? 'md' : 'lg'}
+              textAlign={isMobile ? 'center' : 'left'}
+              color={brandBlue}
+              _hover={{ textDecoration: 'underline' }}
+              onClick={() => {
+                ReactGA.event({
+                  category: 'Tool',
+                  action: 'View Details',
+                  label: result.url,
+                });
+                setSelectedTool(null);
+                setIsLoading(true);
+              }}
+            >
+              {result.name}
+            </Heading>
+            <Tooltip label="Visit tool website">
+              <Link
+                href={result.url}
+                isExternal
+                ml={2}
+                onClick={handleExternalLinkClick}
+              >
+                <Icon as={ExternalLinkIcon} color={brandPink} />
+              </Link>
+            </Tooltip>
+          </Flex>
           <Text
             fontSize={isMobile ? 'sm' : 'md'}
             textAlign={isMobile ? 'center' : 'left'}
@@ -78,8 +117,12 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) => {
             size={isMobile ? 'sm' : 'md'}
             colorScheme="pink"
             mt={2}
-            // onclick set tool to null and loading to true
-            onCanPlay={() => {
+            onClick={() => {
+              ReactGA.event({
+                category: 'Tool',
+                action: 'View Details',
+                label: result.url,
+              });
               setSelectedTool(null);
               setIsLoading(true);
             }}

@@ -14,6 +14,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { searchToolsByKeyword, SearchResult } from '../api/search';
 import KeywordToolResultItem from '../components/KeywordToolResultItem';
 import { ToolTag } from '../api/search';
+import ReactGA from 'react-ga4';
 
 const KeywordToolsPage: React.FC = () => {
   const { keyword } = useParams<{ keyword: string }>();
@@ -54,6 +55,11 @@ const KeywordToolsPage: React.FC = () => {
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
+    ReactGA.event({
+      category: 'Pagination',
+      action: 'Page Change',
+      label: `${keyword}-${newPage.toString()}`,
+    });
   };
 
   return (

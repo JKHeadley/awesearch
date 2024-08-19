@@ -16,6 +16,7 @@ export interface SearchResult {
 }
 
 export interface ToolDetails extends SearchResult {
+  _id: string;
   purpose: string;
   description: string;
   intended_use: string;
