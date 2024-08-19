@@ -9,6 +9,7 @@ import KeywordToolsPage from './pages/KeywordsToolsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
+import AdSenseInitializer from './components/AdSenseInitializer';
 import theme from './theme';
 
 const App: React.FC = () => {
@@ -34,6 +35,7 @@ const App: React.FC = () => {
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <Router>
+        <AdSenseInitializer />
         <GoogleAnalytics>
           <ScrollToTop />
           <Header />

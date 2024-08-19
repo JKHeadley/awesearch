@@ -15,6 +15,7 @@ import { RepeatIcon, CopyIcon } from '@chakra-ui/icons';
 import { useToast } from '@chakra-ui/react';
 import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
+import AdSense from '../components/AdSense';
 import { searchDatabase } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
@@ -129,6 +130,7 @@ const SearchPage: React.FC = () => {
       bg={bgColor}
       minH="calc(100vh - 100px)"
     >
+      <AdSense />
       <LoadingOverlay isLoading={isLoading} />
       <VStack spacing={6} width="100%">
         <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
