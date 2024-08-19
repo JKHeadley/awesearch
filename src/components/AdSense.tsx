@@ -1,25 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface AdSenseProps {
   style?: React.CSSProperties;
+  adSlot?: string;
 }
 
-const AdSense: React.FC<AdSenseProps> = ({ style }) => {
+const AdSense: React.FC<AdSenseProps> = ({ style, adSlot }) => {
   const adRef = useRef<any>(null);
-  const [isAdLoaded, setIsAdLoaded] = useState(false);
 
   useEffect(() => {
-    if (import.meta.env.PROD && adRef.current && !isAdLoaded) {
+    if (import.meta.env.PROD && adRef.current && (window as any).adsbygoogle) {
       try {
         ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push(
           {},
         );
-        setIsAdLoaded(true);
       } catch (error) {
         console.error('Error displaying AdSense ad:', error);
       }
     }
-  }, [isAdLoaded]);
+  }, []);
 
   if (!import.meta.env.PROD) {
     return (
@@ -43,7 +42,7 @@ const AdSense: React.FC<AdSenseProps> = ({ style }) => {
       className="adsbygoogle"
       style={{ display: 'block', ...style }}
       data-ad-client={import.meta.env.VITE_ADSENSE_CLIENT}
-      data-ad-slot="AUTO"
+      data-ad-slot={adSlot || 'AUTO'}
       data-ad-format="auto"
       data-full-width-responsive="true"
       ref={adRef}
