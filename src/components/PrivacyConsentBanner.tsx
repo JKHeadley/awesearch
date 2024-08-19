@@ -26,24 +26,39 @@ const PrivacyConsentBanner: React.FC = () => {
   const handleAccept = () => {
     localStorage.setItem('privacyConsent', 'true');
     setShowBanner(false);
+
+    // Update consent state
     (window as any).gtag('consent', 'update', {
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
       ad_storage: 'granted',
       analytics_storage: 'granted',
     });
-    window.location.reload(); // Reload to apply changes
+
+    // Load Google tag script
+    const gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${
+      import.meta.env.VITE_GA4_MEASUREMENT_ID
+    }`;
+    document.head.appendChild(gtagScript);
+
+    // Reload the page to ensure all components respect the new consent state
+    window.location.reload();
   };
 
   const handleReject = () => {
     localStorage.setItem('privacyConsent', 'false');
     setShowBanner(false);
+
+    // Update consent state to keep everything denied
     (window as any).gtag('consent', 'update', {
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
       ad_storage: 'denied',
       analytics_storage: 'denied',
     });
-    // Disable analytics
-    if ((window as any).ga) {
-      window['ga-disable-' + import.meta.env.VITE_GA4_MEASUREMENT_ID] = true;
-    }
+
     // Clear all localStorage data except for the consent status
     Object.keys(localStorage).forEach((key) => {
       if (key !== 'privacyConsent') {
@@ -51,7 +66,9 @@ const PrivacyConsentBanner: React.FC = () => {
       }
     });
     sessionStorage.clear(); // Clear all sessionStorage data
-    window.location.reload(); // Reload to apply changes
+
+    // Reload the page to ensure all components respect the new consent state
+    window.location.reload();
   };
 
   if (!showBanner) return null;

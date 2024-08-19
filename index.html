@@ -4,22 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="google-adsense-account" content="ca-pub-8758936595956434" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
     <!-- Android Chrome Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
-    
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/android-chrome-512x512.png"
+    />
+
     <!-- Web App Manifest -->
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="manifest" href="/site.webmanifest" />
 
     <meta property="og:image" content="%VITE_OG_IMAGE_URL%" />
 
@@ -29,7 +38,6 @@
       content="AweSearch - Find the perfect development tools using AI-powered search"
     />
     <title>AweSearch - AI-Powered Development Tool Search</title>
-
 
     <script
       async
@@ -1242,18 +1250,22 @@
       );
     </script>
 
-
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'analytics_storage': 'denied',
-        'wait_for_update': 500
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
       });
-      gtag('set', 'ads_data_redaction', true);
-      </script>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCKD6H44BD"></script>
+      gtag('js', new Date());
+      gtag('config', 'G-ZCKD6H44BD');
+    </script>
+    
   </head>
   <body>
     <div id="root"></div>
