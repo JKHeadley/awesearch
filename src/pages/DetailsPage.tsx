@@ -105,6 +105,9 @@ const DetailsPage: React.FC = () => {
         }
         image={selectedTool.logo || import.meta.env.OG_IMAGE_URL} // Use tool logo if available, otherwise default
         url={`https://awesearch.app/details/${id}`}
+        type="article"
+        siteName="AweSearch"
+        // twitterHandle="@awesearch" // Replace with your actual Twitter handle
       />
       <Box
         maxW="container.xl"

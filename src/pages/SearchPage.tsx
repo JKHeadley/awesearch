@@ -163,6 +163,9 @@ const SearchPage: React.FC = () => {
         description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search."
         image={import.meta.env.OG_IMAGE_URL} // Replace with your actual OG image URL
         url="https://awesearch.app"
+        type="website"
+        siteName="AweSearch"
+        // twitterHandle="@awesearch" // Replace with your actual Twitter handle
       />
       <Box
         maxW="container.xl"
