@@ -176,7 +176,6 @@ const SearchPage: React.FC = () => {
         bg={bgColor}
         minH="calc(100vh - 100px)"
       >
-        {privacyConsent === 'true' && <AdSense />}
         <LoadingOverlay isLoading={isLoading} />
         <VStack spacing={6} width="100%">
           <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
@@ -254,6 +253,7 @@ const SearchPage: React.FC = () => {
             Click Search to try the example query, or modify it for your
             specific needs. Use the refresh button to try another example.
           </Text>
+          {privacyConsent === 'true' && <AdSense />}
           <SearchResults results={searchResults} />
         </VStack>
         <AboutModal isOpen={isOpen} onClose={onClose} />
