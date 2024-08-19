@@ -23,6 +23,7 @@ import { exampleQueries } from './ExampleQueries';
 import ReactGA from 'react-ga4';
 import { ReactGAEvent } from '../utils/react-ga-event';
 import AboutModal from '../components/AboutModal';
+import MetaTags from '../components/MetaTags';
 
 const SearchPage: React.FC = () => {
   const {
@@ -156,97 +157,105 @@ const SearchPage: React.FC = () => {
   };
 
   return (
-    <Box
-      maxW="container.xl"
-      mx="auto"
-      pb={16}
-      mt={8}
-      px={{ base: 4, md: 8, lg: 16 }}
-      bg={bgColor}
-      minH="calc(100vh - 100px)"
-    >
-      {privacyConsent === 'true' && <AdSense />}
-      <LoadingOverlay isLoading={isLoading} />
-      <VStack spacing={6} width="100%">
-        <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
-          Try an example query or enter your own:
-        </Text>
-        <HStack width="100%" align="start">
-          <VStack width="100%" align="start">
-            <Textarea
-              value={isPlaceholder ? placeholder : query}
-              onChange={handleChange}
-              onFocus={handleFocus}
+    <>
+      <MetaTags
+        title="AweSearch - Find the Perfect Development Tools"
+        description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search."
+        image="https://awesearch.app/og-image.jpg" // Replace with your actual OG image URL
+        url="https://awesearch.app"
+      />
+      <Box
+        maxW="container.xl"
+        mx="auto"
+        pb={16}
+        mt={8}
+        px={{ base: 4, md: 8, lg: 16 }}
+        bg={bgColor}
+        minH="calc(100vh - 100px)"
+      >
+        {privacyConsent === 'true' && <AdSense />}
+        <LoadingOverlay isLoading={isLoading} />
+        <VStack spacing={6} width="100%">
+          <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
+            Try an example query or enter your own:
+          </Text>
+          <HStack width="100%" align="start">
+            <VStack width="100%" align="start">
+              <Textarea
+                value={isPlaceholder ? placeholder : query}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                size={isMobile ? 'md' : 'lg'}
+                bg={useColorModeValue('white', 'gray.700')}
+                borderColor={brandPink}
+                _hover={{ borderColor: 'pink.400' }}
+                _focus={{
+                  borderColor: 'pink.400',
+                  boxShadow: `0 0 0 1px ${brandPink}`,
+                }}
+                height="150px"
+                resize="vertical"
+              />
+              <HStack>
+                <Tooltip label="Try another example query">
+                  <IconButton
+                    aria-label="Try another query"
+                    icon={<RepeatIcon />}
+                    onClick={handleTryAnother}
+                    colorScheme="pink"
+                    size={isMobile ? 'sm' : 'md'}
+                  />
+                </Tooltip>
+                <Tooltip label="Copy query">
+                  <IconButton
+                    aria-label="Copy query"
+                    icon={<CopyIcon />}
+                    onClick={handleCopy}
+                    colorScheme="pink"
+                    size={isMobile ? 'sm' : 'md'}
+                    isDisabled={!(isPlaceholder ? placeholder : query).trim()}
+                  />
+                </Tooltip>
+
+                <Tooltip label="Learn more about AweSearch">
+                  <IconButton
+                    aria-label="About AweSearch"
+                    icon={<InfoIcon />}
+                    onClick={() => {
+                      ReactGAEvent({
+                        category: 'Search',
+                        action: 'Open About Modal',
+                      });
+
+                      onOpen();
+                    }}
+                    colorScheme="pink"
+                    size={isMobile ? 'sm' : 'md'}
+                  ></IconButton>
+                </Tooltip>
+              </HStack>
+            </VStack>
+          </HStack>
+          <HStack width="100%" justifyContent="center" spacing={4}>
+            <Button
+              onClick={handleSearch}
+              isLoading={isLoading}
+              width={isMobile ? '100%' : 'auto'}
               size={isMobile ? 'md' : 'lg'}
-              bg={useColorModeValue('white', 'gray.700')}
-              borderColor={brandPink}
-              _hover={{ borderColor: 'pink.400' }}
-              _focus={{
-                borderColor: 'pink.400',
-                boxShadow: `0 0 0 1px ${brandPink}`,
-              }}
-              height="150px"
-              resize="vertical"
-            />
-            <HStack>
-              <Tooltip label="Try another example query">
-                <IconButton
-                  aria-label="Try another query"
-                  icon={<RepeatIcon />}
-                  onClick={handleTryAnother}
-                  colorScheme="pink"
-                  size={isMobile ? 'sm' : 'md'}
-                />
-              </Tooltip>
-              <Tooltip label="Copy query">
-                <IconButton
-                  aria-label="Copy query"
-                  icon={<CopyIcon />}
-                  onClick={handleCopy}
-                  colorScheme="pink"
-                  size={isMobile ? 'sm' : 'md'}
-                  isDisabled={!(isPlaceholder ? placeholder : query).trim()}
-                />
-              </Tooltip>
-
-              <Tooltip label="Learn more about AweSearch">
-                <IconButton
-                  aria-label="About AweSearch"
-                  icon={<InfoIcon />}
-                  onClick={() => {
-                    ReactGAEvent({
-                      category: 'Search',
-                      action: 'Open About Modal',
-                    });
-
-                    onOpen();
-                  }}
-                  colorScheme="pink"
-                  size={isMobile ? 'sm' : 'md'}
-                ></IconButton>
-              </Tooltip>
-            </HStack>
-          </VStack>
-        </HStack>
-        <HStack width="100%" justifyContent="center" spacing={4}>
-          <Button
-            onClick={handleSearch}
-            isLoading={isLoading}
-            width={isMobile ? '100%' : 'auto'}
-            size={isMobile ? 'md' : 'lg'}
-            colorScheme="pink"
-          >
-            Search
-          </Button>
-        </HStack>
-        <Text fontSize="sm" color="gray.500">
-          Click Search to try the example query, or modify it for your specific
-          needs. Use the refresh button to try another example.
-        </Text>
-        <SearchResults results={searchResults} />
-      </VStack>
-      <AboutModal isOpen={isOpen} onClose={onClose} />
-    </Box>
+              colorScheme="pink"
+            >
+              Search
+            </Button>
+          </HStack>
+          <Text fontSize="sm" color="gray.500">
+            Click Search to try the example query, or modify it for your
+            specific needs. Use the refresh button to try another example.
+          </Text>
+          <SearchResults results={searchResults} />
+        </VStack>
+        <AboutModal isOpen={isOpen} onClose={onClose} />
+      </Box>
+    </>
   );
 };
 
