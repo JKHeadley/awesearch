@@ -10,6 +10,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import AdSenseInitializer from './components/AdSenseInitializer';
+import PrivacyConsentBanner from './components/PrivacyConsentBanner';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import theme from './theme';
 
 const App: React.FC = () => {
@@ -26,8 +28,10 @@ const App: React.FC = () => {
               <Route path="/" element={<SearchPage />} />
               <Route path="/details/:id" element={<DetailsPage />} />
               <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            <PrivacyConsentBanner />
           </GoogleAnalytics>
         </Router>
       </ChakraProvider>
