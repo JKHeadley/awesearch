@@ -15,7 +15,7 @@ import theme from './theme';
 const App: React.FC = () => {
   return (
     <>
-      <AdSenseInitializer />
+      {/* <AdSenseInitializer /> */}
       <ChakraProvider theme={theme}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Router>
