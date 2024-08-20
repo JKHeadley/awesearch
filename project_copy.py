@@ -80,12 +80,9 @@ def copy_git_project():
             # Copy the file to project_copy
             dest_path = copy_dir / filename
             
-            # If a file with the same name already exists, append a number
-            counter = 1
-            while dest_path.exists():
-                name, ext = os.path.splitext(filename)
-                dest_path = copy_dir / f"{name}_{counter}{ext}"
-                counter += 1
+            # If a file with the same name already exists overwrite it
+            if dest_path.exists():
+                dest_path.unlink()
             
             shutil.copy2(file_path, dest_path)
             print(f"Copied: {file_path.relative_to(root_dir)} -> {dest_path.name}")
