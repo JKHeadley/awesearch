@@ -20,6 +20,7 @@ import {
   List,
   ListItem,
   keyframes,
+  Link,
 } from '@chakra-ui/react';
 import { RepeatIcon, CopyIcon, InfoIcon, SpinnerIcon } from '@chakra-ui/icons';
 import { FaMagic } from 'react-icons/fa';
@@ -36,14 +37,22 @@ import MetaTags from '../components/MetaTags';
 
 const pulseAnimation = keyframes`
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.4);
+    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 10px rgba(255, 105, 180, 0);
+    box-shadow: 0 0 0 15px rgba(255, 105, 180, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
   }
+`;
+
+const wiggleAnimation = keyframes`
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
 `;
 
 const SearchPage: React.FC = () => {
@@ -60,8 +69,8 @@ const SearchPage: React.FC = () => {
   const [privacyConsent, setPrivacyConsent] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [awesomizedQueries, setAwesomizedQueries] = useState<string[]>([]);
-  const [isAwesomizeing, setIsAwesomizeing] = useState(false);
-  const [showPulse, setShowPulse] = useState(true);
+  const [isAwesomizing, setIsAwesomizing] = useState(false);
+  const [isWiggling, setIsWiggling] = useState(false);
   const {
     isOpen: isAwesomizeModalOpen,
     onOpen: onAwesomizeModalOpen,
@@ -201,14 +210,13 @@ const SearchPage: React.FC = () => {
       label: query,
     });
 
-    setIsAwesomizeing(true);
+    setIsAwesomizing(true);
     try {
       const awesomized = await awesomizeQuery(query);
       setAwesomizedQueries(awesomized);
       onAwesomizeModalOpen();
-      setShowPulse(false);
     } catch (error) {
-      console.error('Error awesomizeing query:', error);
+      console.error('Error awesomizing query:', error);
       toast({
         title: 'Error',
         description: 'Failed to awesomize the query. Please try again.',
@@ -217,7 +225,7 @@ const SearchPage: React.FC = () => {
         isClosable: true,
       });
     } finally {
-      setIsAwesomizeing(false);
+      setIsAwesomizing(false);
     }
   };
 
@@ -231,6 +239,11 @@ const SearchPage: React.FC = () => {
       action: 'Select Awesomized Query',
       label: selectedQuery,
     });
+  };
+
+  const handleAwesomizeClick = () => {
+    setIsWiggling(true);
+    setTimeout(() => setIsWiggling(false), 500);
   };
 
   return (
@@ -255,7 +268,17 @@ const SearchPage: React.FC = () => {
         <LoadingOverlay isLoading={isLoading} />
         <VStack spacing={6} width="100%">
           <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
-            Try an example query or enter your own:
+            Try an example query or{' '}
+            <Link
+              color={brandPink}
+              fontWeight="bold"
+              onClick={handleAwesomizeClick}
+              cursor="pointer"
+              textDecoration="underline"
+            >
+              awesomize
+            </Link>{' '}
+            your own:
           </Text>
           <HStack width="100%" align="start">
             <VStack width="100%" align="start">
@@ -312,15 +335,15 @@ const SearchPage: React.FC = () => {
                 <Tooltip label="Awesomize your query with AI">
                   <IconButton
                     aria-label="Awesomize query"
-                    icon={isAwesomizeing ? <SpinnerIcon /> : <FaMagic />}
+                    icon={isAwesomizing ? <SpinnerIcon /> : <FaMagic />}
                     onClick={handleAwesomizeQuery}
                     colorScheme="pink"
                     size={isMobile ? 'sm' : 'md'}
-                    isLoading={isAwesomizeing}
+                    isLoading={isAwesomizing}
                     isDisabled={!query.trim()}
-                    animation={
-                      showPulse ? `${pulseAnimation} 2s infinite` : 'none'
-                    }
+                    animation={`${pulseAnimation} 2s infinite, ${
+                      isWiggling ? `${wiggleAnimation} 0.5s` : 'none'
+                    }`}
                   />
                 </Tooltip>
               </HStack>
