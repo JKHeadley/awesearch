@@ -101,6 +101,30 @@ const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
               or business resources, AweSearch harnesses the power of AI to
               accelerate your project and boost your productivity.
             </Text>
+            <Text color={textColor} fontWeight="bold">
+              New Feature: Awesomize Your Query!
+            </Text>
+            <Text color={textColor}>
+              Our new Awesomize feature uses AI to enhance your search queries.
+              Just click the magic wand icon to generate
+              more specific and powerful search options. This helps you discover
+              the perfect tools for your project even faster!
+            </Text>
+            <Text color={textColor}>How to use Awesomize:</Text>
+            <VStack spacing={2} align="start" pl={4}>
+              <Text color={textColor}>
+                1. Enter your initial query or use an example.
+              </Text>
+              <Text color={textColor}>
+                2. Click the magic wand icon.
+              </Text>
+              <Text color={textColor}>
+                3. Choose from the AI-generated, awesomized query options.
+              </Text>
+              <Text color={textColor}>
+                4. Enjoy more targeted and effective search results!
+              </Text>
+            </VStack>
           </VStack>
         </ModalBody>
         <ModalFooter>
