@@ -26,7 +26,7 @@ const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
   title,
 }) => {
   const iconColor = useColorModeValue('blue.600', 'blue.300');
-  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  const buttonSize = useBreakpointValue({ base: 'md', lg: 'lg' });
 
   const shareButtons = [
     {
@@ -63,7 +63,9 @@ const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
     //   name: 'Messenger',
     //   icon: RiMessengerLine,
     //   color: 'messenger',
-    //   shareUrl: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&app_id=YOUR_FACEBOOK_APP_ID&redirect_uri=${encodeURIComponent(url)}`,
+    //   shareUrl: `https://www.facebook.com/dialog/send?link=${encodeURIComponent(
+    //     url,
+    //   )}&app_id=YOUR_FACEBOOK_APP_ID&redirect_uri=${encodeURIComponent(url)}`,
     // },
     {
       name: 'Reddit',
@@ -88,7 +90,7 @@ const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({
   };
 
   return (
-    <Wrap spacing={2} justify="center">
+    <Wrap spacing={2} justify={{ base: 'center', md: 'flex-start' }}>
       {shareButtons.map((button) => (
         <Tooltip key={button.name} label={`Share on ${button.name}`}>
           <IconButton

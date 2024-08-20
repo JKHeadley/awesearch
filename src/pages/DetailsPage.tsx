@@ -65,7 +65,7 @@ const DetailsPage: React.FC = () => {
   );
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  const buttonSize = useBreakpointValue({ base: 'md', lg: 'lg' });
 
   const analysisFromState = location.state?.analysis;
 
@@ -465,7 +465,13 @@ const DetailsPage: React.FC = () => {
             </CardBody>
           </Card>
 
-          <VStack spacing={4} align="stretch" mt={8}>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            justify="center"
+            align="center"
+            mt={8}
+            gap={4}
+          >
             <Button
               as={Link}
               href={selectedTool.url}
@@ -473,6 +479,7 @@ const DetailsPage: React.FC = () => {
               colorScheme="pink"
               rightIcon={<ExternalLinkIcon />}
               size={buttonSize}
+              width={{ base: 'full', md: 'auto' }}
               onClick={() => {
                 ReactGAEvent({
                   category: 'Tool',
@@ -483,8 +490,10 @@ const DetailsPage: React.FC = () => {
             >
               Visit Website
             </Button>
-            <SocialShareButtons url={currentUrl} title={shareTitle} />
-          </VStack>
+            <Box width={isMobile ? 'full' : 'auto'}>
+              <SocialShareButtons url={currentUrl} title={shareTitle} />
+            </Box>
+          </Flex>
         </VStack>
       </Box>
     </>
