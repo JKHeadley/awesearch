@@ -38,6 +38,7 @@ import { getToolDetails, ToolTag } from '../api/search';
 import { useStore } from '../store/store';
 import { ReactGAEvent } from '../utils/react-ga-event';
 import MetaTags from '../components/MetaTags';
+import SocialShareButtons from '../components/SocialShareButtons';
 
 const DetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -55,11 +56,16 @@ const DetailsPage: React.FC = () => {
   const accordionBgColor = useColorModeValue('blue.50', 'blue.900');
   const accordionColor = useColorModeValue(brandBlue, brandPink);
 
+  const currentUrl = window.location.href;
+  const shareTitle = `Check out ${selectedTool?.name} on AweSearch`;
+
   const logoSrc = useColorModeValue(
     import.meta.env.VITE_LOGO_DARK_URL,
     import.meta.env.VITE_LOGO_LIGHT_URL,
   );
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
 
   const analysisFromState = location.state?.analysis;
 
@@ -459,13 +465,14 @@ const DetailsPage: React.FC = () => {
             </CardBody>
           </Card>
 
-          <HStack justify="center" mt={8}>
+          <VStack spacing={4} align="stretch" mt={8}>
             <Button
               as={Link}
               href={selectedTool.url}
               isExternal
               colorScheme="pink"
               rightIcon={<ExternalLinkIcon />}
+              size={buttonSize}
               onClick={() => {
                 ReactGAEvent({
                   category: 'Tool',
@@ -476,16 +483,8 @@ const DetailsPage: React.FC = () => {
             >
               Visit Website
             </Button>
-            <Button
-              leftIcon={<InfoIcon />}
-              onClick={() => {
-                /* Implement share functionality */
-              }}
-              colorScheme="blue"
-            >
-              Share
-            </Button>
-          </HStack>
+            <SocialShareButtons url={currentUrl} title={shareTitle} />
+          </VStack>
         </VStack>
       </Box>
     </>
