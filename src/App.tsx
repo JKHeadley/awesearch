@@ -39,6 +39,7 @@ const App: React.FC = () => {
               <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/ads.txt" element={null} />
             </Routes>
             <Footer />
             {privacyConsent === null && <PrivacyConsentBanner />}
