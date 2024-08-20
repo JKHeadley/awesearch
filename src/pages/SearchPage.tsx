@@ -23,6 +23,7 @@ import MetaTags from '../components/MetaTags';
 import SearchInput from '../components/SearchInput';
 import ActionButtons from '../components/ActionButtons';
 import AwesomizeModal from '../components/AwesomizeModal';
+import SearchHistory from '../components/SearchHistory';
 
 // TODO: Clear Query and Provide Search History
 
@@ -42,6 +43,7 @@ const SearchPage: React.FC = () => {
   const [awesomizedQueries, setAwesomizedQueries] = useState<string[]>([]);
   const [isAwesomizing, setIsAwesomizing] = useState(false);
   const [isWiggling, setIsWiggling] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const {
     isOpen: isAwesomizeModalOpen,
     onOpen: onAwesomizeModalOpen,
@@ -116,6 +118,16 @@ const SearchPage: React.FC = () => {
   }, [setQuery]);
 
   useEffect(() => {
+    const consent = localStorage.getItem('privacyConsent');
+    if (consent === 'true') {
+      const storedHistory = localStorage.getItem('searchHistory');
+      if (storedHistory) {
+        setSearchHistory(JSON.parse(storedHistory));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!query) {
       const randomQuery = getRandomQuery();
       setPlaceholder(randomQuery);
@@ -125,6 +137,22 @@ const SearchPage: React.FC = () => {
       setPlaceholder(query);
     }
   }, [setQuery]);
+  const addToSearchHistory = (query: string) => {
+    const consent = localStorage.getItem('privacyConsent');
+    if (consent === 'true') {
+      const updatedHistory = [
+        query,
+        ...searchHistory.filter((q) => q !== query),
+      ].slice(0, 10);
+      setSearchHistory(updatedHistory);
+      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+    }
+  };
+
+  const clearSearchHistory = () => {
+    setSearchHistory([]);
+    localStorage.removeItem('searchHistory');
+  };
 
   const handleSearch = async () => {
     ReactGAEvent({
@@ -140,9 +168,13 @@ const SearchPage: React.FC = () => {
         label: placeholder,
       });
     }
+
+    const searchQuery = isPlaceholder ? placeholder : query;
+    addToSearchHistory(searchQuery);
+
     setIsLoading(true);
     try {
-      const results = await searchDatabase(isPlaceholder ? placeholder : query);
+      const results = await searchDatabase(searchQuery);
       setSearchResults(results);
     } catch (error) {
       console.error('Error during search:', error);
@@ -156,6 +188,16 @@ const SearchPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSelectHistoryQuery = (selectedQuery: string) => {
+    setQuery(selectedQuery);
+    setIsPlaceholder(false);
+    ReactGAEvent({
+      category: 'Search',
+      action: 'Select History Query',
+      label: selectedQuery,
+    });
   };
 
   const handleFocus = () => {
@@ -271,22 +313,29 @@ const SearchPage: React.FC = () => {
               isMobile={isMobile}
               brandPink={brandPink}
             />
-            <ActionButtons
-              handleTryAnother={handleTryAnother}
-              handleCopy={handleCopy}
-              handleAbout={() => {
-                ReactGAEvent({
-                  category: 'Search',
-                  action: 'Open About Modal',
-                });
-                onOpen();
-              }}
-              handleAwesomizeQuery={handleAwesomizeQuery}
-              isAwesomizing={isAwesomizing}
-              isWiggling={isWiggling}
-              isMobile={isMobile}
-              isDisabled={!(isPlaceholder ? placeholder : query).trim()}
-            />
+            <HStack width="100%" justifyContent="space-between">
+              <ActionButtons
+                handleTryAnother={handleTryAnother}
+                handleCopy={handleCopy}
+                handleAbout={() => {
+                  ReactGAEvent({
+                    category: 'Search',
+                    action: 'Open About Modal',
+                  });
+                  onOpen();
+                }}
+                handleAwesomizeQuery={handleAwesomizeQuery}
+                isAwesomizing={isAwesomizing}
+                isWiggling={isWiggling}
+                isMobile={isMobile}
+                isDisabled={!(isPlaceholder ? placeholder : query).trim()}
+              />
+              <SearchHistory
+                history={searchHistory}
+                onSelectQuery={handleSelectHistoryQuery}
+                onClearHistory={clearSearchHistory}
+              />
+            </HStack>
           </VStack>
           <HStack width="100%" justifyContent="center" spacing={4}>
             <Button
