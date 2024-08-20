@@ -6,11 +6,6 @@
 
 [[redirects]]
     from = "/ads.txt"
-    to = "/.netlify/functions/ads-txt"
+    to = "/ads.txt.html"
     status = 200
     force = true
-    
-  [
-redirects.headers
-]
-    Content-Type = "text/plain"

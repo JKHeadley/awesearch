@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ads.txt</title>
+  </head>
+  <body>
+    <pre id="content"></pre>
+    <script>
+      fetch('/.netlify/functions/ads-txt')
+        .then((response) => response.text())
+        .then((text) => {
+          document.getElementById('content').textContent = text;
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          document.getElementById('content').textContent =
+            'Error loading ads.txt content';
+        });
+    </script>
+  </body>
+</html>
