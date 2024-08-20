@@ -24,6 +24,8 @@ import SearchInput from '../components/SearchInput';
 import ActionButtons from '../components/ActionButtons';
 import AwesomizeModal from '../components/AwesomizeModal';
 
+// TODO: Clear Query and Provide Search History
+
 const SearchPage: React.FC = () => {
   const {
     query,
@@ -52,6 +54,17 @@ const SearchPage: React.FC = () => {
   const brandBlue = useColorModeValue('#000080', '#F0F8FF');
 
   const toast = useToast();
+
+  const handleClearQuery = () => {
+    setQuery('');
+    setIsPlaceholder(false);
+    setPlaceholder(getRandomQuery());
+
+    ReactGAEvent({
+      category: 'Search',
+      action: 'Clear Query',
+    });
+  };
 
   const handleCopy = () => {
     navigator.clipboard
@@ -254,6 +267,7 @@ const SearchPage: React.FC = () => {
               value={isPlaceholder ? placeholder : query}
               onChange={handleChange}
               onFocus={handleFocus}
+              onClear={handleClearQuery}
               isMobile={isMobile}
               brandPink={brandPink}
             />
