@@ -93,7 +93,7 @@ const DetailsPage: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!selectedTool) return null;
+  if (!selectedTool) return <LoadingOverlay isLoading={isLoading} />;
 
   return (
     <>
