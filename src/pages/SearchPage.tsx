@@ -1,29 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Textarea,
   Button,
   VStack,
   Text,
   HStack,
   useBreakpointValue,
   useColorModeValue,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
-  List,
-  ListItem,
-  keyframes,
   Link,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { RepeatIcon, CopyIcon, InfoIcon, SpinnerIcon } from '@chakra-ui/icons';
-import { FaMagic } from 'react-icons/fa';
 import { useToast } from '@chakra-ui/react';
 import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -34,26 +20,9 @@ import { exampleQueries } from './ExampleQueries';
 import { ReactGAEvent } from '../utils/react-ga-event';
 import AboutModal from '../components/AboutModal';
 import MetaTags from '../components/MetaTags';
-
-const pulseAnimation = keyframes`
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 15px rgba(255, 105, 180, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
-  }
-`;
-
-const wiggleAnimation = keyframes`
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  50% { transform: rotate(10deg); }
-  75% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
-`;
+import SearchInput from '../components/SearchInput';
+import ActionButtons from '../components/ActionButtons';
+import AwesomizeModal from '../components/AwesomizeModal';
 
 const SearchPage: React.FC = () => {
   const {
@@ -280,75 +249,31 @@ const SearchPage: React.FC = () => {
             </Link>{' '}
             your own:
           </Text>
-          <HStack width="100%" align="start">
-            <VStack width="100%" align="start">
-              <Textarea
-                value={isPlaceholder ? placeholder : query}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                size={isMobile ? 'md' : 'lg'}
-                bg={useColorModeValue('white', 'gray.700')}
-                borderColor={brandPink}
-                _hover={{ borderColor: 'pink.400' }}
-                _focus={{
-                  borderColor: 'pink.400',
-                  boxShadow: `0 0 0 1px ${brandPink}`,
-                }}
-                height="150px"
-                resize="vertical"
-              />
-              <HStack>
-                <Tooltip label="Try another example query">
-                  <IconButton
-                    aria-label="Try another query"
-                    icon={<RepeatIcon />}
-                    onClick={handleTryAnother}
-                    colorScheme="pink"
-                    size={isMobile ? 'sm' : 'md'}
-                  />
-                </Tooltip>
-                <Tooltip label="Copy query">
-                  <IconButton
-                    aria-label="Copy query"
-                    icon={<CopyIcon />}
-                    onClick={handleCopy}
-                    colorScheme="pink"
-                    size={isMobile ? 'sm' : 'md'}
-                    isDisabled={!(isPlaceholder ? placeholder : query).trim()}
-                  />
-                </Tooltip>
-                <Tooltip label="Learn more about AweSearch">
-                  <IconButton
-                    aria-label="About AweSearch"
-                    icon={<InfoIcon />}
-                    onClick={() => {
-                      ReactGAEvent({
-                        category: 'Search',
-                        action: 'Open About Modal',
-                      });
-                      onOpen();
-                    }}
-                    colorScheme="pink"
-                    size={isMobile ? 'sm' : 'md'}
-                  />
-                </Tooltip>
-                <Tooltip label="Awesomize your query with AI">
-                  <IconButton
-                    aria-label="Awesomize query"
-                    icon={isAwesomizing ? <SpinnerIcon /> : <FaMagic />}
-                    onClick={handleAwesomizeQuery}
-                    colorScheme="pink"
-                    size={isMobile ? 'sm' : 'md'}
-                    isLoading={isAwesomizing}
-                    isDisabled={!query.trim()}
-                    animation={`${pulseAnimation} 2s infinite, ${
-                      isWiggling ? `${wiggleAnimation} 0.5s` : 'none'
-                    }`}
-                  />
-                </Tooltip>
-              </HStack>
-            </VStack>
-          </HStack>
+          <VStack width="100%" align="start">
+            <SearchInput
+              value={isPlaceholder ? placeholder : query}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              isMobile={isMobile}
+              brandPink={brandPink}
+            />
+            <ActionButtons
+              handleTryAnother={handleTryAnother}
+              handleCopy={handleCopy}
+              handleAbout={() => {
+                ReactGAEvent({
+                  category: 'Search',
+                  action: 'Open About Modal',
+                });
+                onOpen();
+              }}
+              handleAwesomizeQuery={handleAwesomizeQuery}
+              isAwesomizing={isAwesomizing}
+              isWiggling={isWiggling}
+              isMobile={isMobile}
+              isDisabled={!(isPlaceholder ? placeholder : query).trim()}
+            />
+          </VStack>
           <HStack width="100%" justifyContent="center" spacing={4}>
             <Button
               onClick={handleSearch}
@@ -369,45 +294,12 @@ const SearchPage: React.FC = () => {
           <SearchResults results={searchResults} />
         </VStack>
         <AboutModal isOpen={isOpen} onClose={onClose} />
-
-        {/* Awesomize Query Modal */}
-        <Modal
+        <AwesomizeModal
           isOpen={isAwesomizeModalOpen}
           onClose={onAwesomizeModalClose}
-          size="xl"
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Awesomized Query Options</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Text mb={4}>
-                Choose an awesomized query to supercharge your search:
-              </Text>
-              <List spacing={3}>
-                {awesomizedQueries.map((awesomizedQuery, index) => (
-                  <ListItem key={index}>
-                    <Button
-                      onClick={() =>
-                        handleSelectAwesomizedQuery(awesomizedQuery)
-                      }
-                      variant="outline"
-                      colorScheme="pink"
-                      width="100%"
-                      justifyContent="flex-start"
-                      whiteSpace="normal"
-                      textAlign="left"
-                      height="auto"
-                      py={2}
-                    >
-                      {awesomizedQuery}
-                    </Button>
-                  </ListItem>
-                ))}
-              </List>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+          awesomizedQueries={awesomizedQueries}
+          handleSelectAwesomizedQuery={handleSelectAwesomizedQuery}
+        />
       </Box>
     </>
   );
