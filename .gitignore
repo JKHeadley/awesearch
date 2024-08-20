@@ -55,3 +55,4 @@ embeddings.json
 _ignored
 **/*/coverage/**/*
 dist
+/project_copy
