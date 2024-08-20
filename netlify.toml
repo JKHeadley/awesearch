@@ -8,3 +8,4 @@
     from = "/ads.txt"
     to = "/.netlify/functions/ads-txt"
     status = 200
+    force = true
