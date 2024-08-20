@@ -11,19 +11,40 @@ import {
   IconButton,
   Tooltip,
   useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  List,
+  ListItem,
+  keyframes,
 } from '@chakra-ui/react';
-import { RepeatIcon, CopyIcon, InfoIcon } from '@chakra-ui/icons';
+import { RepeatIcon, CopyIcon, InfoIcon, SpinnerIcon } from '@chakra-ui/icons';
+import { FaMagic } from 'react-icons/fa';
 import { useToast } from '@chakra-ui/react';
 import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
 import AdSense from '../components/AdSense';
-import { searchDatabase } from '../api/search';
+import { searchDatabase, awesomizeQuery } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
-import ReactGA from 'react-ga4';
 import { ReactGAEvent } from '../utils/react-ga-event';
 import AboutModal from '../components/AboutModal';
 import MetaTags from '../components/MetaTags';
+
+const pulseAnimation = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 105, 180, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 105, 180, 0);
+  }
+`;
 
 const SearchPage: React.FC = () => {
   const {
@@ -38,6 +59,14 @@ const SearchPage: React.FC = () => {
   const [isPlaceholder, setIsPlaceholder] = useState(true);
   const [privacyConsent, setPrivacyConsent] = useState<string | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [awesomizedQueries, setAwesomizedQueries] = useState<string[]>([]);
+  const [isAwesomizeing, setIsAwesomizeing] = useState(false);
+  const [showPulse, setShowPulse] = useState(true);
+  const {
+    isOpen: isAwesomizeModalOpen,
+    onOpen: onAwesomizeModalOpen,
+    onClose: onAwesomizeModalClose,
+  } = useDisclosure();
 
   const isMobile = useBreakpointValue({ base: true, md: false });
   const bgColor = useColorModeValue('gray.50', 'gray.800');
@@ -45,6 +74,7 @@ const SearchPage: React.FC = () => {
   const brandBlue = useColorModeValue('#000080', '#F0F8FF');
 
   const toast = useToast();
+
   const handleCopy = () => {
     navigator.clipboard
       .writeText(isPlaceholder ? placeholder : query)
@@ -125,7 +155,13 @@ const SearchPage: React.FC = () => {
       setSearchResults(results);
     } catch (error) {
       console.error('Error during search:', error);
-      // Optionally, show an error message to the user
+      toast({
+        title: 'Search failed',
+        description: 'An error occurred while searching. Please try again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -156,16 +192,56 @@ const SearchPage: React.FC = () => {
     });
   };
 
+  const handleAwesomizeQuery = async () => {
+    if (!query.trim()) return;
+
+    ReactGAEvent({
+      category: 'Search',
+      action: 'Awesomize Query',
+      label: query,
+    });
+
+    setIsAwesomizeing(true);
+    try {
+      const awesomized = await awesomizeQuery(query);
+      setAwesomizedQueries(awesomized);
+      onAwesomizeModalOpen();
+      setShowPulse(false);
+    } catch (error) {
+      console.error('Error awesomizeing query:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to awesomize the query. Please try again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsAwesomizeing(false);
+    }
+  };
+
+  const handleSelectAwesomizedQuery = (selectedQuery: string) => {
+    setQuery(selectedQuery);
+    setIsPlaceholder(false);
+    onAwesomizeModalClose();
+
+    ReactGAEvent({
+      category: 'Search',
+      action: 'Select Awesomized Query',
+      label: selectedQuery,
+    });
+  };
+
   return (
     <>
       <MetaTags
         title="AweSearch - Find the Perfect Development Tools"
         description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search."
-        image={import.meta.env.OG_IMAGE_URL} // Replace with your actual OG image URL
+        image={import.meta.env.OG_IMAGE_URL}
         url="https://awesearch.app"
         type="website"
         siteName="AweSearch"
-        // twitterHandle="@awesearch" // Replace with your actual Twitter handle
       />
       <Box
         maxW="container.xl"
@@ -218,7 +294,6 @@ const SearchPage: React.FC = () => {
                     isDisabled={!(isPlaceholder ? placeholder : query).trim()}
                   />
                 </Tooltip>
-
                 <Tooltip label="Learn more about AweSearch">
                   <IconButton
                     aria-label="About AweSearch"
@@ -228,12 +303,25 @@ const SearchPage: React.FC = () => {
                         category: 'Search',
                         action: 'Open About Modal',
                       });
-
                       onOpen();
                     }}
                     colorScheme="pink"
                     size={isMobile ? 'sm' : 'md'}
-                  ></IconButton>
+                  />
+                </Tooltip>
+                <Tooltip label="Awesomize your query with AI">
+                  <IconButton
+                    aria-label="Awesomize query"
+                    icon={isAwesomizeing ? <SpinnerIcon /> : <FaMagic />}
+                    onClick={handleAwesomizeQuery}
+                    colorScheme="pink"
+                    size={isMobile ? 'sm' : 'md'}
+                    isLoading={isAwesomizeing}
+                    isDisabled={!query.trim()}
+                    animation={
+                      showPulse ? `${pulseAnimation} 2s infinite` : 'none'
+                    }
+                  />
                 </Tooltip>
               </HStack>
             </VStack>
@@ -251,12 +339,52 @@ const SearchPage: React.FC = () => {
           </HStack>
           <Text fontSize="sm" color="gray.500">
             Click Search to try the example query, or modify it for your
-            specific needs. Use the refresh button to try another example.
+            specific needs. Use the refresh button to try another example. Click
+            the magic wand to awesomize your query with AI suggestions!
           </Text>
           {privacyConsent === 'true' && <AdSense />}
           <SearchResults results={searchResults} />
         </VStack>
         <AboutModal isOpen={isOpen} onClose={onClose} />
+
+        {/* Awesomize Query Modal */}
+        <Modal
+          isOpen={isAwesomizeModalOpen}
+          onClose={onAwesomizeModalClose}
+          size="xl"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Awesomized Query Options</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text mb={4}>
+                Choose an awesomized query to supercharge your search:
+              </Text>
+              <List spacing={3}>
+                {awesomizedQueries.map((awesomizedQuery, index) => (
+                  <ListItem key={index}>
+                    <Button
+                      onClick={() =>
+                        handleSelectAwesomizedQuery(awesomizedQuery)
+                      }
+                      variant="outline"
+                      colorScheme="pink"
+                      width="100%"
+                      justifyContent="flex-start"
+                      whiteSpace="normal"
+                      textAlign="left"
+                      height="auto"
+                      py={2}
+                    >
+                      {awesomizedQuery}
+                    </Button>
+                  </ListItem>
+                ))}
+              </List>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </Box>
     </>
   );

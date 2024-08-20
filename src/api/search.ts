@@ -102,3 +102,13 @@ export const getToolDetails = async (id: string): Promise<ToolDetails> => {
     throw error;
   }
 };
+
+export const awesomizeQuery = async (query: string): Promise<string[]> => {
+  try {
+    const response = await axios.post(`${API_URL}/awesomize`, { query });
+    return response.data;
+  } catch (error) {
+    console.error('Error expanding query:', error);
+    throw error;
+  }
+};
