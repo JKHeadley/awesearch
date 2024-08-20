@@ -9,3 +9,8 @@
     to = "/.netlify/functions/ads-txt"
     status = 200
     force = true
+    
+  [
+redirects.headers
+]
+    Content-Type = "text/plain"
