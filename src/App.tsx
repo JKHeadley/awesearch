@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { HelmetProvider } from 'react-helmet-async';
@@ -13,16 +13,17 @@ import ScrollToTop from './components/ScrollToTop';
 import GoogleAnalytics from './components/GoogleAnalytics';
 import PrivacyConsentBanner from './components/PrivacyConsentBanner';
 import theme from './theme';
+import { useStore } from './store/store';
 
 const App: React.FC = () => {
-  const [showConsentBanner, setShowConsentBanner] = useState(false);
+  const { privacyConsent, setPrivacyConsent } = useStore();
 
   useEffect(() => {
-    const consent = localStorage.getItem('privacyConsent');
-    if (consent === null) {
-      setShowConsentBanner(true);
+    const storedConsent = localStorage.getItem('privacyConsent');
+    if (storedConsent) {
+      setPrivacyConsent(storedConsent);
     }
-  }, []);
+  }, [setPrivacyConsent]);
 
   return (
     <HelmetProvider>
@@ -40,7 +41,7 @@ const App: React.FC = () => {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <Footer />
-            {showConsentBanner && <PrivacyConsentBanner />}
+            {privacyConsent === null && <PrivacyConsentBanner />}
           </GoogleAnalytics>
         </Router>
       </ChakraProvider>

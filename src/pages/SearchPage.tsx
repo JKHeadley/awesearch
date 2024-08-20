@@ -25,8 +25,6 @@ import ActionButtons from '../components/ActionButtons';
 import AwesomizeModal from '../components/AwesomizeModal';
 import SearchHistory from '../components/SearchHistory';
 
-// TODO: Clear Query and Provide Search History
-
 const SearchPage: React.FC = () => {
   const {
     query,
@@ -35,15 +33,19 @@ const SearchPage: React.FC = () => {
     setSearchResults,
     isLoading,
     setIsLoading,
+    privacyConsent,
+    searchHistory,
+    addToSearchHistory,
+    clearSearchHistory,
   } = useStore();
+
   const [placeholder, setPlaceholder] = useState('');
   const [isPlaceholder, setIsPlaceholder] = useState(true);
-  const [privacyConsent, setPrivacyConsent] = useState<string | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [awesomizedQueries, setAwesomizedQueries] = useState<string[]>([]);
   const [isAwesomizing, setIsAwesomizing] = useState(false);
   const [isWiggling, setIsWiggling] = useState(false);
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isAwesomizeModalOpen,
     onOpen: onAwesomizeModalOpen,
@@ -56,6 +58,25 @@ const SearchPage: React.FC = () => {
   const brandBlue = useColorModeValue('#000080', '#F0F8FF');
 
   const toast = useToast();
+
+  const getRandomQuery = () => {
+    return exampleQueries[Math.floor(Math.random() * exampleQueries.length)];
+  };
+
+  useEffect(() => {
+    setIsPlaceholder(exampleQueries.includes(query));
+  }, [query]);
+
+  useEffect(() => {
+    if (!query) {
+      const randomQuery = getRandomQuery();
+      setPlaceholder(randomQuery);
+      setQuery(randomQuery);
+      setIsPlaceholder(true);
+    } else {
+      setPlaceholder(query);
+    }
+  }, [setQuery]);
 
   const handleClearQuery = () => {
     setQuery('');
@@ -96,62 +117,6 @@ const SearchPage: React.FC = () => {
           isClosable: true,
         });
       });
-  };
-
-  const getRandomQuery = () => {
-    return exampleQueries[Math.floor(Math.random() * exampleQueries.length)];
-  };
-
-  useEffect(() => {
-    setIsPlaceholder(exampleQueries.includes(query));
-  }, [query]);
-
-  useEffect(() => {
-    const consent = localStorage.getItem('privacyConsent');
-    setPrivacyConsent(consent);
-    if (consent === 'true' && !query) {
-      const randomQuery = getRandomQuery();
-      setPlaceholder(randomQuery);
-      setQuery(randomQuery);
-      setIsPlaceholder(true);
-    }
-  }, [setQuery]);
-
-  useEffect(() => {
-    const consent = localStorage.getItem('privacyConsent');
-    if (consent === 'true') {
-      const storedHistory = localStorage.getItem('searchHistory');
-      if (storedHistory) {
-        setSearchHistory(JSON.parse(storedHistory));
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!query) {
-      const randomQuery = getRandomQuery();
-      setPlaceholder(randomQuery);
-      setQuery(randomQuery);
-      setIsPlaceholder(true);
-    } else {
-      setPlaceholder(query);
-    }
-  }, [setQuery]);
-  const addToSearchHistory = (query: string) => {
-    const consent = localStorage.getItem('privacyConsent');
-    if (consent === 'true') {
-      const updatedHistory = [
-        query,
-        ...searchHistory.filter((q) => q !== query),
-      ].slice(0, 10);
-      setSearchHistory(updatedHistory);
-      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
-    }
-  };
-
-  const clearSearchHistory = () => {
-    setSearchHistory([]);
-    localStorage.removeItem('searchHistory');
   };
 
   const handleSearch = async () => {
@@ -334,6 +299,7 @@ const SearchPage: React.FC = () => {
                 history={searchHistory}
                 onSelectQuery={handleSelectHistoryQuery}
                 onClearHistory={clearSearchHistory}
+                privacyConsent={privacyConsent === 'true'}
               />
             </HStack>
           </VStack>

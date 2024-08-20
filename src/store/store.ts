@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { ToolDetails } from '../api/search';
 
@@ -21,24 +21,38 @@ interface AppState {
   setSelectedTool: (tool: ToolDetails | null) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  privacyConsent: string | null;
+  setPrivacyConsent: (consent: string | null) => void;
+  searchHistory: string[];
+  addToSearchHistory: (query: string) => void;
+  clearSearchHistory: () => void;
 }
 
 const useStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       query: '',
-      setQuery: (query) => {
-        const consent = localStorage.getItem('privacyConsent');
-        if (consent === 'true') {
-          set({ query });
-        }
-      },
+      setQuery: (query) => set({ query }),
       searchResults: [],
       setSearchResults: (results) => set({ searchResults: results }),
       selectedTool: null,
       setSelectedTool: (tool) => set({ selectedTool: tool }),
       isLoading: false,
       setIsLoading: (isLoading) => set({ isLoading }),
+      privacyConsent: null,
+      setPrivacyConsent: (consent) => set({ privacyConsent: consent }),
+      searchHistory: [],
+      addToSearchHistory: (query) => {
+        const { privacyConsent, searchHistory } = get();
+        if (privacyConsent === 'true') {
+          const updatedHistory = [
+            query,
+            ...searchHistory.filter((q) => q !== query),
+          ].slice(0, 10);
+          set({ searchHistory: updatedHistory });
+        }
+      },
+      clearSearchHistory: () => set({ searchHistory: [] }),
     }),
     {
       name: 'awesearch-storage',

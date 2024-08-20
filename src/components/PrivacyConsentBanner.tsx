@@ -8,9 +8,11 @@ import {
   HStack,
   Flex,
 } from '@chakra-ui/react';
+import { useStore } from '../store/store';
 
 const PrivacyConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
+  const { setPrivacyConsent } = useStore();
   const bgColor = useColorModeValue('gray.50', 'gray.800');
   const textColor = useColorModeValue('gray.700', 'gray.200');
   const brandPink = '#FF69B4';
@@ -24,6 +26,7 @@ const PrivacyConsentBanner: React.FC = () => {
   }, []);
 
   const handleAccept = () => {
+    setPrivacyConsent('true');
     localStorage.setItem('privacyConsent', 'true');
     setShowBanner(false);
 
@@ -40,29 +43,37 @@ const PrivacyConsentBanner: React.FC = () => {
   };
 
   const handleReject = () => {
-    localStorage.setItem('privacyConsent', 'false');
+    setPrivacyConsent('false');
+
+    // Save the current privacyConsent value
+    const currentConsent = 'false';
+
+    // Clear all localStorage items
+    localStorage.clear();
+
+    // Reset the privacyConsent in localStorage
+    localStorage.setItem('privacyConsent', currentConsent);
+
+    // Clear all sessionStorage data
+    sessionStorage.clear();
+
+    // Update consent state for Google Analytics (if you're using it)
+    if ((window as any).gtag) {
+      (window as any).gtag('consent', 'update', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'granted', // You might want to keep this granted for security reasons
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+      });
+    }
     setShowBanner(false);
 
-    // Update consent state to keep everything denied
-    (window as any).gtag('consent', 'update', {
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      ad_storage: 'denied',
-      analytics_storage: 'denied',
-    });
-
-    // Clear all localStorage data except for the consent status
-    Object.keys(localStorage).forEach((key) => {
-      if (key !== 'privacyConsent') {
-        localStorage.removeItem(key);
-      }
-    });
-    sessionStorage.clear(); // Clear all sessionStorage data
-
-    // Reload the page to ensure all components respect the new consent state
+    // Optional: Reload the page to ensure a clean state
     window.location.reload();
   };
-
   if (!showBanner) return null;
 
   return (
