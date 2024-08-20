@@ -15,12 +15,12 @@ const pulseAnimation = keyframes`
   }
 `;
 
-const wiggleAnimation = keyframes`
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  50% { transform: rotate(10deg); }
-  75% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
+const wiggleAndExpandAnimation = keyframes`
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-10deg) scale(1.2); }
+  50% { transform: rotate(10deg) scale(1.4); }
+  75% { transform: rotate(-5deg) scale(1.2); }
+  100% { transform: rotate(0deg) scale(1); }
 `;
 
 interface ActionButtonsProps {
@@ -84,7 +84,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           isLoading={isAwesomizing}
           isDisabled={isDisabled}
           animation={`${pulseAnimation} 2s infinite, ${
-            isWiggling ? `${wiggleAnimation} 0.5s` : 'none'
+            isWiggling ? `${wiggleAndExpandAnimation} 0.5s` : 'none'
           }`}
         />
       </Tooltip>
