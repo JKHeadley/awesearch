@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Box,
   Text,
@@ -8,7 +8,10 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '../store/store';
 import {
+  FIRST_TIP,
+  firstTips,
   mainLoadingTips,
   additionalLoadingTips,
 } from '../pages/ExampleQueries';
@@ -17,26 +20,28 @@ interface LoadingOverlayProps {
   isLoading: boolean;
 }
 
+type TipCategory = 'first' | 'main' | 'additional';
+
+interface ShownTips {
+  first: string[];
+  main: string[];
+  additional: string[];
+}
+
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
   const [currentTip, setCurrentTip] = useState('');
+  const shownTipsRef = useRef<ShownTips>({
+    first: [],
+    main: [],
+    additional: [],
+  });
+  const setGlobalShownTips = useStore((state) => state.setShownTips);
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const [isMainTip, setIsMainTip] = useState(true);
+  const isMainTipRef = useRef(true);
+  const intervalRef = useRef<any | null>(null);
 
-  const getNextTip = useCallback(() => {
-    if (isMainTip) {
-      const nextTip =
-        additionalLoadingTips[
-          Math.floor(Math.random() * additionalLoadingTips.length)
-        ];
-      setCurrentTip(nextTip);
-      setIsMainTip(false);
-    } else {
-      const nextTip =
-        mainLoadingTips[Math.floor(Math.random() * mainLoadingTips.length)];
-      setCurrentTip(nextTip);
-      setIsMainTip(true);
-    }
-  }, [isMainTip]);
+  const FIRST_TIP_DURATION = 7000;
+  const SUBSEQUENT_TIP_DURATION = 5000;
 
   const logoSrc = useColorModeValue(
     import.meta.env.VITE_LOGO_DARK_URL,
@@ -56,19 +61,89 @@ const LoadingOverlay: React.FC<LoadingOverlayProps> = ({ isLoading }) => {
     'rgba(255, 255, 255, 0.1)',
   );
 
-  // Grab the first tip from the main list
-  useEffect(() => {
-    const randomTip =
-      mainLoadingTips[Math.floor(Math.random() * mainLoadingTips.length)];
-    setCurrentTip(randomTip);
+  const getNextTip = useCallback((category: TipCategory) => {
+    const tipPool =
+      category === 'first'
+        ? firstTips
+        : category === 'main'
+        ? mainLoadingTips
+        : additionalLoadingTips;
+    const availableTips = tipPool.filter(
+      (tip) => !shownTipsRef.current[category].includes(tip),
+    );
+
+    if (availableTips.length === 0) {
+      shownTipsRef.current[category] = []; // Reset the category
+      return tipPool[Math.floor(Math.random() * tipPool.length)];
+    }
+
+    return availableTips[Math.floor(Math.random() * availableTips.length)];
   }, []);
 
+  const updateShownTips = useCallback((category: TipCategory, tip: string) => {
+    shownTipsRef.current[category].push(tip);
+  }, []);
+
+  const changeTip = useCallback(() => {
+    console.log('Changing tip');
+    console.log(isMainTipRef.current);
+    console.log(shownTipsRef.current);
+    const category = isMainTipRef.current
+      ? 'main'
+      : ('additional' as TipCategory);
+    const nextTip = getNextTip(category);
+    setCurrentTip(nextTip);
+    isMainTipRef.current = !isMainTipRef.current;
+    updateShownTips(category, nextTip);
+  }, [getNextTip, updateShownTips]);
+
   useEffect(() => {
+    let isMounted = true;
     if (isLoading) {
-      const intervalId = setInterval(getNextTip, 5000); // Change tip every 5 seconds
-      return () => clearInterval(intervalId);
+      const hasSeenFirstTip = localStorage.getItem('hasSeenFirstTip');
+      let initialTip: string;
+
+      if (!hasSeenFirstTip) {
+        initialTip = FIRST_TIP;
+        localStorage.setItem('hasSeenFirstTip', 'true');
+      } else {
+        initialTip = getNextTip('first');
+        updateShownTips('first', initialTip);
+      }
+
+      if (isMounted) setCurrentTip(initialTip);
+
+      const firstInterval = setTimeout(
+        () => {
+          if (isMounted) {
+            changeTip();
+            intervalRef.current = setInterval(
+              changeTip,
+              initialTip === FIRST_TIP
+                ? FIRST_TIP_DURATION
+                : SUBSEQUENT_TIP_DURATION,
+            );
+          }
+        },
+        initialTip === FIRST_TIP ? FIRST_TIP_DURATION : SUBSEQUENT_TIP_DURATION,
+      );
+
+      return () => {
+        isMounted = false;
+        clearTimeout(firstInterval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+        setGlobalShownTips(shownTipsRef.current);
+      };
+    } else {
+      // Clear interval when not loading
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     }
-  }, [isLoading, getNextTip]);
+  }, [isLoading, getNextTip, updateShownTips, changeTip, setGlobalShownTips]);
 
   if (!isLoading) return null;
 

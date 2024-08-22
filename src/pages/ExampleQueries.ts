@@ -141,6 +141,21 @@ export const exampleQueries = [
   'Looking for an advanced robotic process automation (RPA) platform with cognitive capabilities for automating complex business processes. The platform should support both attended and unattended automation, offer a low-code/no-code interface for business users as well as advanced scripting capabilities for developers. It needs to include AI-powered document understanding for processing unstructured data, have natural language processing capabilities for interpreting and generating human language, and support computer vision for interacting with various application interfaces and handling captchas. The platform should offer orchestration capabilities for managing complex workflows across multiple systems and departments, provide tools for process mining and task discovery, and include features for measuring and optimizing automation ROI. It needs to have robust governance and control mechanisms, support version control and release management for bots, and offer detailed analytics on bot performance and business impact. The platform should seamlessly integrate with enterprise systems (SAP, Salesforce, etc.), support automation in virtual and Citrix environments, and offer cloud, on-premises, and hybrid deployment options. Additionally, it should include features for attended automation like guided assistance and human-in-the-loop workflows, support mobile interfaces for bot management and monitoring, and provide tools for ensuring compliance with industry regulations and internal policies.',
 ];
 
+export const FIRST_TIP = "Welcome to AweSearch magic! Our AI is now curating an awesome toolset just for you. This thoughtful process takes a moment, but get ready to be awed by the perfectly tailored results!";
+
+export const firstTips = [
+  "Our AI is meticulously curating the perfect tools for your unique needs. This may take a moment, but the results will be worth the wait!",
+  "Harnessing the power of AI to handpick tools tailored just for you. Greatness takes a little time!",
+  "AI magic in progress: Analyzing your query and scouring our vast database for the ideal tools. Hang tight!",
+  "Crafting a personalized toolset with AI precision. This thoughtful process ensures you get the best results!",
+  "Our AI is diving deep into the world of dev tools to surface the gems that match your specific requirements. Excellence is just moments away!",
+  "Patience pays off: Our AI is meticulously filtering through thousands of tools to find your perfect match.",
+  "AI-powered customization in progress: We're carefully selecting tools that align with your unique project needs.",
+  "Transforming your query into a curated toolset: Our AI is working its magic to deliver tailored results.",
+  "Unleashing AI brilliance to find your ideal tools. This careful process ensures unparalleled accuracy in our recommendations.",
+  "AI-driven precision at work: We're taking a moment to thoroughly analyze and personalize your search results."
+];
+
 export const mainLoadingTips = [
   'AweSearch uses AI to find the perfect tools for your needs.',
   'Our database includes thousands of tools and resources for entrepreneurs and developers.',

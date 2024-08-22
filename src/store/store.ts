@@ -12,6 +12,12 @@ interface SearchResult {
   summary: string;
 }
 
+interface ShownTips {
+  first: string[];
+  main: string[];
+  additional: string[];
+}
+
 interface AppState {
   query: string;
   setQuery: (query: string) => void;
@@ -26,6 +32,8 @@ interface AppState {
   searchHistory: string[];
   addToSearchHistory: (query: string) => void;
   clearSearchHistory: () => void;
+  shownTips: ShownTips;
+  setShownTips: (tips: ShownTips) => void;
 }
 
 const useStore = create<AppState>()(
@@ -53,6 +61,12 @@ const useStore = create<AppState>()(
         }
       },
       clearSearchHistory: () => set({ searchHistory: [] }),
+      shownTips: {
+        first: [],
+        main: [],
+        additional: [],
+      },
+      setShownTips: (tips) => set({ shownTips: tips }),
     }),
     {
       name: 'awesearch-storage',
