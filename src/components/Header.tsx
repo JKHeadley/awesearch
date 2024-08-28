@@ -7,9 +7,12 @@ import {
   Spacer,
   useColorModeValue,
   Link,
+  useBreakpointValue,
+  VStack,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import ColorModeToggle from './ColorModeToggle';
+import SideMenu from './SideMenu';
 
 const Header: React.FC = () => {
   const bgColor = useColorModeValue('gray.50', 'gray.800');
@@ -21,30 +24,59 @@ const Header: React.FC = () => {
     import.meta.env.VITE_LOGO_LIGHT_URL,
   );
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <Box as="header" bg={bgColor} py={3} boxShadow="sm">
-      <Flex maxW="container.xl" mx="auto" alignItems="center" px={4}>
-        <Flex alignItems="center">
+      <Flex
+        maxW="container.xl"
+        mx="auto"
+        alignItems="center"
+        px={4}
+        flexWrap={isMobile ? 'wrap' : 'nowrap'}
+      >
+        {isMobile && (
+          <Flex width="100%" justifyContent="space-between" mb={2}>
+            <SideMenu />
+            <ColorModeToggle />
+          </Flex>
+        )}
+        {!isMobile && <SideMenu />}
+        <Flex alignItems="center" justifyContent="center" flex={1}>
           <Link as={RouterLink} to="/" display="flex" alignItems="center">
             <Image
               src={logoSrc}
               alt={'awesearch logo'}
-              boxSize="80px"
+              boxSize={isMobile ? '60px' : '80px'}
               objectFit="contain"
-              mr={4}
+              mr={2}
             />
-            <Heading as="h3" size="md" fontWeight="normal" color={textColor}>
-              <Box as="span" color={brandPink}>
-                awesomeness
-              </Box>{' '}
-              curated,
-              <br />
-              development accelerated
-            </Heading>
+            <VStack align="start" spacing={0}>
+              <Heading
+                as="h3"
+                size={isMobile ? 'sm' : 'md'}
+                fontWeight="normal"
+                color={textColor}
+                lineHeight="1.2"
+              >
+                <Box as="span" color={brandPink}>
+                  awesomeness
+                </Box>{' '}
+                curated,
+              </Heading>
+              <Heading
+                as="h3"
+                size={isMobile ? 'sm' : 'md'}
+                fontWeight="normal"
+                color={textColor}
+                lineHeight="1.2"
+              >
+                development accelerated
+              </Heading>
+            </VStack>
           </Link>
         </Flex>
-        <Spacer />
-        <ColorModeToggle />
+        {!isMobile && <ColorModeToggle />}
       </Flex>
     </Box>
   );

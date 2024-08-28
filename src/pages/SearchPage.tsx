@@ -238,12 +238,14 @@ const SearchPage: React.FC = () => {
   return (
     <>
       <MetaTags
-        title="AweSearch - Find the Perfect Development Tools"
-        description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search."
+        title="AweSearch - Find the Perfect Development Tools | AI-Powered Search"
+        description="AweSearch helps developers and entrepreneurs discover the best tools and resources for their projects using AI-powered search. Find curated development tools, frameworks, and libraries to accelerate your project."
         image={import.meta.env.OG_IMAGE_URL}
         url="https://awesearch.app"
         type="website"
         siteName="AweSearch"
+        keywords="developer tools, software development, programming resources, AI search, curated tools"
+        author="Inkwell AI"
       />
       <Box
         maxW="container.xl"

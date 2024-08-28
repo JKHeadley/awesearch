@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import SearchPage from './pages/SearchPage';
 import DetailsPage from './pages/DetailsPage';
 import KeywordToolsPage from './pages/KeywordsToolsPage';
+import AboutPage from './pages/AboutPage';
+
 import NotFoundPage from './pages/NotFoundPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import ScrollToTop from './components/ScrollToTop';
@@ -14,6 +16,7 @@ import GoogleAnalytics from './components/GoogleAnalytics';
 import PrivacyConsentBanner from './components/PrivacyConsentBanner';
 import theme from './theme';
 import { useStore } from './store/store';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 
 const App: React.FC = () => {
   const { privacyConsent, setPrivacyConsent } = useStore();
@@ -38,6 +41,8 @@ const App: React.FC = () => {
               <Route path="/details/:id" element={<DetailsPage />} />
               <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/ads.txt" element={null} />
             </Routes>

@@ -9,6 +9,8 @@ interface MetaTagsProps {
   type?: string;
   siteName?: string;
   twitterHandle?: string;
+  keywords?: string;
+  author?: string;
 }
 
 const MetaTags: React.FC<MetaTagsProps> = ({
@@ -18,13 +20,17 @@ const MetaTags: React.FC<MetaTagsProps> = ({
   url,
   type = 'website',
   siteName = 'AweSearch',
-  twitterHandle = '@awesearch', // Replace with your actual Twitter handle
+  twitterHandle = '@awesearch',
+  keywords = 'developer tools, software development, programming resources',
+  author = 'AweSearch Team',
 }) => {
   return (
     <Helmet>
       {/* Standard meta tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <meta name="author" content={author} />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -44,6 +50,9 @@ const MetaTags: React.FC<MetaTagsProps> = ({
 
       {/* Additional helpful tags */}
       <link rel="canonical" href={url} />
+      <meta name="robots" content="index, follow" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
     </Helmet>
   );
 };
