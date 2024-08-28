@@ -15,17 +15,35 @@ import {
 import { useForm, ValidationError } from '@formspree/react';
 
 const ContactForm: React.FC = () => {
-  const [state, handleSubmit] = useForm('mvgplqpq');
+  const formId = import.meta.env.VITE_FORMSPREE_FORM_ID;
+  const [state, handleSubmit] = useForm(formId);
+  const [toastShown, setToastShown] = React.useState(false);
   const toast = useToast();
 
   if (state.succeeded) {
-    toast({
-      title: 'Message sent.',
-      description: "We'll get back to you soon!",
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
+    if (!toastShown) {
+      toast({
+        title: 'Message sent.',
+        description: "We'll get back to you soon!",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setToastShown(true);
+    }
+  }
+
+  if (state.errors) {
+    if (!toastShown) {
+      toast({
+        title: 'An error occurred.',
+        description: 'Please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      setToastShown(true);
+    }
   }
 
   return (
