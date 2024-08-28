@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Box,
   VStack,
@@ -11,17 +11,35 @@ import {
   Button,
   useColorModeValue,
   useToast,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { useForm, ValidationError } from '@formspree/react';
 
+declare global {
+  interface Window {
+    grecaptcha: any;
+  }
+}
+
 const ContactForm: React.FC = () => {
   const formId = import.meta.env.VITE_FORMSPREE_FORM_ID;
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [state, handleSubmit] = useForm(formId);
-  const [toastShown, setToastShown] = React.useState(false);
   const toast = useToast();
+  const recaptchaRef = useRef<HTMLDivElement>(null);
 
-  if (state.succeeded) {
-    if (!toastShown) {
+  useEffect(() => {
+    // Render reCAPTCHA when the component mounts
+    if (recaptchaRef.current && window.grecaptcha) {
+      window.grecaptcha.render(recaptchaRef.current, {
+        sitekey: recaptchaSiteKey,
+      });
+    }
+  }, [recaptchaSiteKey]);
+
+  useEffect(() => {
+    if (state.succeeded) {
       toast({
         title: 'Message sent.',
         description: "We'll get back to you soon!",
@@ -29,26 +47,42 @@ const ContactForm: React.FC = () => {
         duration: 5000,
         isClosable: true,
       });
-      setToastShown(true);
-    }
-  }
-
-  if (state.errors) {
-    if (!toastShown) {
+    } else if (state.errors && Object.keys(state.errors).length > 0) {
       toast({
-        title: 'An error occurred.',
+        title: 'Error sending message.',
         description: 'Please try again later.',
         status: 'error',
         duration: 5000,
         isClosable: true,
       });
-      setToastShown(true);
     }
-  }
+  }, [state.succeeded, state.errors, toast]);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const recaptchaValue = window.grecaptcha.getResponse();
+    if (!recaptchaValue) {
+      toast({
+        title: 'reCAPTCHA required',
+        description: 'Please complete the reCAPTCHA.',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    await handleSubmit(e);
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={onSubmit}>
       <VStack spacing={4}>
+        {state.errors && Object.keys(state.errors).length > 0 && (
+          <Alert status="error">
+            <AlertIcon />
+            There was an error sending your message. Please try again.
+          </Alert>
+        )}
         <FormControl isRequired>
           <FormLabel htmlFor="email">Email Address</FormLabel>
           <Input id="email" type="email" name="email" />
@@ -63,6 +97,7 @@ const ContactForm: React.FC = () => {
             errors={state.errors}
           />
         </FormControl>
+        <Box ref={recaptchaRef} />
         <Button
           type="submit"
           disabled={state.submitting}
