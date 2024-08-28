@@ -7,6 +7,9 @@ import {
   Link,
   useColorModeValue,
   Button,
+  VStack,
+  HStack,
+  Divider,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -29,34 +32,58 @@ const Footer: React.FC = () => {
       borderStyle={'solid'}
       borderColor={useColorModeValue('gray.200', 'gray.700')}
     >
-      <Container
-        as={Stack}
-        maxW={'6xl'}
-        py={4}
-        direction={{ base: 'column', md: 'row' }}
-        spacing={4}
-        justify={{ base: 'center', md: 'space-between' }}
-        align={{ base: 'center', md: 'center' }}
-      >
-        <Text>© 2024 AweSearch. All rights reserved</Text>
-        <Stack direction={'row'} spacing={6}>
-          <Link as={RouterLink} to="/privacy-policy" color={brandPink}>
-            Privacy Policy
-          </Link>
-          <Link as={RouterLink} to="/contact" color={brandPink}>
-            Contact Us
-          </Link>
-          <Button
-            onClick={handlePrivacyUpdate}
-            variant="link"
-            color={brandBlue}
+      <Container maxW={'6xl'} py={4}>
+        <VStack spacing={4} align="stretch">
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            justify="space-between"
+            align={{ base: 'center', md: 'center' }}
+            spacing={4}
           >
-            Update Privacy Settings
-          </Button>
-          <Link as={RouterLink} to="/sitemap" color={textColor} fontSize="sm">
-            Sitemap
-          </Link>
-        </Stack>
+            <Text textAlign={{ base: 'center', md: 'left' }}>
+              © 2024 AweSearch. All rights reserved
+            </Text>
+            <HStack spacing={4} justify="center" wrap="wrap">
+              <Link as={RouterLink} to="/privacy-policy" color={brandPink}>
+                Privacy Policy
+              </Link>
+              <Link as={RouterLink} to="/contact" color={brandPink}>
+                Contact Us
+              </Link>
+              <Link
+                as={RouterLink}
+                to="/sitemap"
+                color={textColor}
+                fontSize="sm"
+              >
+                Sitemap
+              </Link>
+            </HStack>
+          </Stack>
+
+          <Divider />
+
+          <VStack spacing={2} align="stretch">
+            <Button
+              onClick={handlePrivacyUpdate}
+              variant="link"
+              color={brandBlue}
+              width="full"
+            >
+              Update Privacy Settings
+            </Button>
+            <Button
+              as={Link}
+              href="#"
+              variant="link"
+              color={textColor}
+              fontSize="sm"
+              width="full"
+            >
+              Do Not Sell or Share My Personal Information
+            </Button>
+          </VStack>
+        </VStack>
       </Container>
     </Box>
   );
