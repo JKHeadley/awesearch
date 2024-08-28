@@ -43,6 +43,9 @@ const Footer: React.FC = () => {
           <Link as={RouterLink} to="/privacy-policy" color={brandPink}>
             Privacy Policy
           </Link>
+          <Link as={RouterLink} to="/contact" color={brandPink}>
+            Contact Us
+          </Link>
           <Button
             onClick={handlePrivacyUpdate}
             variant="link"
@@ -50,6 +53,9 @@ const Footer: React.FC = () => {
           >
             Update Privacy Settings
           </Button>
+          <Link as={RouterLink} to="/sitemap" color={textColor} fontSize="sm">
+            Sitemap
+          </Link>
         </Stack>
       </Container>
     </Box>

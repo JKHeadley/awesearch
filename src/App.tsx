@@ -8,7 +8,8 @@ import SearchPage from './pages/SearchPage';
 import DetailsPage from './pages/DetailsPage';
 import KeywordToolsPage from './pages/KeywordsToolsPage';
 import AboutPage from './pages/AboutPage';
-
+import SitemapPage from './pages/SiteMapPage';
+import ContactPage from './pages/ConcatePage';
 import NotFoundPage from './pages/NotFoundPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,8 @@ const App: React.FC = () => {
               <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/sitemap" element={<SitemapPage />} />
               <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/ads.txt" element={null} />

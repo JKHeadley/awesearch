@@ -29,6 +29,7 @@ const SideMenu: React.FC = () => {
     { name: 'About', path: '/about' },
     { name: 'Terms of Service', path: '/terms-of-service' },
     { name: 'Privacy Policy', path: '/privacy-policy' },
+    { name: 'Contact Us', path: '/contact' },
   ];
 
   const isMobile = useBreakpointValue({ base: true, md: false });
