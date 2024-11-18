@@ -51,10 +51,11 @@
     />
     <title>AweSearch - AI-Powered Development Tool Search</title>
 
-    <!-- Preload hints for critical routes -->
-    <link rel="preload" as="script" href="/src/pages/SearchPage.tsx" />
-    <link rel="preload" as="script" href="/src/pages/DetailsPage.tsx" />
-    <link rel="preload" as="script" href="/src/pages/KeywordsToolsPage.tsx" />
+    <!-- Add preload hints for critical assets -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="modulepreload" href="/src/App.tsx" />
+    <link rel="modulepreload" href="/src/components/Header.tsx" />
+    <link rel="modulepreload" href="/src/components/Footer.tsx" />
   </head>
   <body>
     <div id="root"></div>

@@ -13,9 +13,20 @@ import theme from './theme';
 import { useStore } from './store/store';
 import { globalStyles } from './styles/global';
 
-// Lazy load all pages
-const SearchPage = React.lazy(() => import('./pages/SearchPage'));
-const DetailsPage = React.lazy(() => import('./pages/DetailsPage'));
+// Lazy load with prefetch hints
+const SearchPage = React.lazy(() => {
+  // Prefetch the DetailsPage since it's likely to be accessed from search
+  const detailsPromise = import('./pages/DetailsPage');
+  return import('./pages/SearchPage');
+});
+
+const DetailsPage = React.lazy(() => {
+  // Prefetch KeywordToolsPage since it might be accessed from details
+  const keywordPromise = import('./pages/KeywordsToolsPage');
+  return import('./pages/DetailsPage');
+});
+
+// Other routes can be lazy loaded without prefetch
 const KeywordToolsPage = React.lazy(() => import('./pages/KeywordsToolsPage'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const SitemapPage = React.lazy(() => import('./pages/SiteMapPage'));
