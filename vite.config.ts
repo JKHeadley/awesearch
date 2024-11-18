@@ -1,33 +1,35 @@
 // vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-// load .env file using dotenv
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'
+import { loadEnv } from 'vite'
 
-console.log('API URL:', process.env.VITE_API_URL);
-
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: process.env.VITE_API_URL,
-        changeOrigin: true,
-        secure: false
-      }
-    }
-  },
-  build: {
-    minify: 'terser',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['@chakra-ui/react', '@emotion/react', '@emotion/styled'],
+export default defineConfig(({ mode }) => {
+  // Load env file based on `mode` in the current working directory.
+  const env = loadEnv(mode, process.cwd(), '')
+  
+  return {
+    plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: env.VITE_API_URL,
+          changeOrigin: true,
+          secure: false
         }
       }
     },
-    sourcemap: true,
+    build: {
+      minify: 'terser',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            ui: ['@chakra-ui/react', '@emotion/react', '@emotion/styled'],
+          }
+        }
+      },
+      sourcemap: true,
+    }
   }
 })

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { Global } from '@emotion/react';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -18,6 +19,7 @@ import PrivacyConsentBanner from './components/PrivacyConsentBanner';
 import theme from './theme';
 import { useStore } from './store/store';
 import TermsOfServicePage from './pages/TermsOfServicePage';
+import { globalStyles } from './styles/global';
 
 const App: React.FC = () => {
   const { privacyConsent, setPrivacyConsent } = useStore();
@@ -32,6 +34,7 @@ const App: React.FC = () => {
   return (
     <HelmetProvider>
       <ChakraProvider theme={theme}>
+        <Global styles={globalStyles} />
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Router>
           <GoogleAnalytics>
