@@ -1,7 +1,6 @@
 import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
-import { Global } from '@emotion/react';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,18 +10,15 @@ import PrivacyConsentBanner from './components/PrivacyConsentBanner';
 import LoadingSpinner from './components/LoadingSpinner';
 import theme from './theme';
 import { useStore } from './store/store';
-import { globalStyles } from './styles/global';
 import { useScriptLoader } from './hooks/useScriptLoader';
 
 // Lazy load with prefetch hints
 const SearchPage = React.lazy(() => {
-  // Prefetch the DetailsPage since it's likely to be accessed from search
   const detailsPromise = import('./pages/DetailsPage');
   return import('./pages/SearchPage');
 });
 
 const DetailsPage = React.lazy(() => {
-  // Prefetch KeywordToolsPage since it might be accessed from details
   const keywordPromise = import('./pages/KeywordsToolsPage');
   return import('./pages/DetailsPage');
 });
@@ -58,7 +54,6 @@ const App: React.FC = () => {
   return (
     <HelmetProvider>
       <ChakraProvider theme={theme}>
-        <Global styles={globalStyles} />
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <Router>
           <GoogleAnalytics>
