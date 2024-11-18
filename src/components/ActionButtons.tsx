@@ -1,5 +1,6 @@
 import React from 'react';
-import { HStack, IconButton, Tooltip, keyframes } from '@chakra-ui/react';
+import { HStack, IconButton, Tooltip } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { RepeatIcon, CopyIcon, InfoIcon, SpinnerIcon } from '@chakra-ui/icons';
 import { FaMagic } from 'react-icons/fa';
 
