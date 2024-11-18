@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import {
   Box,
   Button,
@@ -235,6 +235,92 @@ const SearchPage: React.FC = () => {
     setTimeout(() => setIsWiggling(false), 500);
   };
 
+  // Separate the critical content into its own component
+  const CriticalContent = () => (
+    <VStack spacing={6} width="100%">
+      <Text 
+        fontSize="lg" 
+        fontWeight="bold" 
+        color={brandBlue}
+        dangerouslySetInnerHTML={{
+          __html: 'Try an example query or <span style="color: #FF69B4; font-weight: bold; cursor: pointer; text-decoration: underline">awesomize</span> your own:'
+        }}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).tagName === 'SPAN') {
+            handleAwesomizeClick();
+          }
+        }}
+      />
+      <VStack width="100%" align="start">
+        <SearchInput
+          value={isPlaceholder ? placeholder : query}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onClear={handleClearQuery}
+          isMobile={isMobile}
+          brandPink={brandPink}
+        />
+        <HStack width="100%" justifyContent="space-between">
+          <ActionButtons
+            handleTryAnother={handleTryAnother}
+            handleCopy={handleCopy}
+            handleAbout={() => {
+              ReactGAEvent({
+                category: 'Search',
+                action: 'Open About Modal',
+              });
+              onOpen();
+            }}
+            handleAwesomizeQuery={handleAwesomizeQuery}
+            isAwesomizing={isAwesomizing}
+            isWiggling={isWiggling}
+            isMobile={isMobile}
+            isDisabled={!(isPlaceholder ? placeholder : query).trim()}
+          />
+          <SearchHistory
+            history={searchHistory}
+            onSelectQuery={handleSelectHistoryQuery}
+            onClearHistory={clearSearchHistory}
+            privacyConsent={privacyConsent === 'true'}
+          />
+        </HStack>
+      </VStack>
+      <HStack width="100%" justifyContent="center" spacing={4}>
+        <Button
+          onClick={handleSearch}
+          isLoading={isLoading}
+          width={isMobile ? '100%' : 'auto'}
+          size={isMobile ? 'md' : 'lg'}
+          colorScheme="pink"
+        >
+          Search
+        </Button>
+      </HStack>
+      <Text 
+        fontSize="sm" 
+        color="gray.500"
+        style={{ 
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 50px' 
+        }}
+      >
+        Click Search to try the example query, or modify it for your
+        specific needs. Use the refresh button to try another example. Click
+        the magic wand to awesomize your query with AI suggestions!
+      </Text>
+    </VStack>
+  );
+
+  // Defer non-critical content
+  const NonCriticalContent = React.lazy(() => Promise.resolve({
+    default: () => (
+      <>
+        {privacyConsent === 'true' && <AdSense />}
+        <SearchResults results={searchResults} />
+      </>
+    )
+  }));
+
   return (
     <>
       <MetaTags
@@ -257,73 +343,10 @@ const SearchPage: React.FC = () => {
         minH="calc(100vh - 100px)"
       >
         <LoadingOverlay isLoading={isLoading} />
-        <VStack spacing={6} width="100%">
-          <Text fontSize="lg" fontWeight="bold" color={brandBlue}>
-            Try an example query or{' '}
-            <Link
-              color={brandPink}
-              fontWeight="bold"
-              onClick={handleAwesomizeClick}
-              cursor="pointer"
-              textDecoration="underline"
-            >
-              awesomize
-            </Link>{' '}
-            your own:
-          </Text>
-          <VStack width="100%" align="start">
-            <SearchInput
-              value={isPlaceholder ? placeholder : query}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onClear={handleClearQuery}
-              isMobile={isMobile}
-              brandPink={brandPink}
-            />
-            <HStack width="100%" justifyContent="space-between">
-              <ActionButtons
-                handleTryAnother={handleTryAnother}
-                handleCopy={handleCopy}
-                handleAbout={() => {
-                  ReactGAEvent({
-                    category: 'Search',
-                    action: 'Open About Modal',
-                  });
-                  onOpen();
-                }}
-                handleAwesomizeQuery={handleAwesomizeQuery}
-                isAwesomizing={isAwesomizing}
-                isWiggling={isWiggling}
-                isMobile={isMobile}
-                isDisabled={!(isPlaceholder ? placeholder : query).trim()}
-              />
-              <SearchHistory
-                history={searchHistory}
-                onSelectQuery={handleSelectHistoryQuery}
-                onClearHistory={clearSearchHistory}
-                privacyConsent={privacyConsent === 'true'}
-              />
-            </HStack>
-          </VStack>
-          <HStack width="100%" justifyContent="center" spacing={4}>
-            <Button
-              onClick={handleSearch}
-              isLoading={isLoading}
-              width={isMobile ? '100%' : 'auto'}
-              size={isMobile ? 'md' : 'lg'}
-              colorScheme="pink"
-            >
-              Search
-            </Button>
-          </HStack>
-          <Text fontSize="sm" color="gray.500">
-            Click Search to try the example query, or modify it for your
-            specific needs. Use the refresh button to try another example. Click
-            the magic wand to awesomize your query with AI suggestions!
-          </Text>
-          {privacyConsent === 'true' && <AdSense />}
-          <SearchResults results={searchResults} />
-        </VStack>
+        <CriticalContent />
+        <Suspense fallback={null}>
+          <NonCriticalContent />
+        </Suspense>
         <AboutModal isOpen={isOpen} onClose={onClose} />
         <AwesomizeModal
           isOpen={isAwesomizeModalOpen}
