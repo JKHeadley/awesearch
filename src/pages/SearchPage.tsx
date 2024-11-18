@@ -299,9 +299,14 @@ const SearchPage: React.FC = () => {
       <Text 
         fontSize="sm" 
         color="gray.500"
+        textAlign="left"
+        maxW="600px"
+        mx="auto"
         style={{ 
           contentVisibility: 'auto',
-          containIntrinsicSize: '0 50px' 
+          containIntrinsicSize: '0 50px',
+          willChange: 'contents',
+          translate: 'none'
         }}
       >
         Click Search to try the example query, or modify it for your
