@@ -12,6 +12,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import theme from './theme';
 import { useStore } from './store/store';
 import { globalStyles } from './styles/global';
+import { useScriptLoader } from './hooks/useScriptLoader';
 
 // Lazy load with prefetch hints
 const SearchPage = React.lazy(() => {
@@ -44,6 +45,15 @@ const App: React.FC = () => {
       setPrivacyConsent(storedConsent);
     }
   }, [setPrivacyConsent]);
+
+  // Load third-party scripts only after consent
+  useScriptLoader(
+    [
+      'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8758936595956434',
+      'https://fundingchoicesmessages.google.com/i/pub-8758936595956434?ers=1'
+    ],
+    [privacyConsent]
+  );
 
   return (
     <HelmetProvider>

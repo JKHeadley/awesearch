@@ -56,6 +56,20 @@
     <link rel="modulepreload" href="/src/App.tsx" />
     <link rel="modulepreload" href="/src/components/Header.tsx" />
     <link rel="modulepreload" href="/src/components/Footer.tsx" />
+
+    <!-- Add these near the top of head -->
+    <link 
+      rel="preload" 
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
