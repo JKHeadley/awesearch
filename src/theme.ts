@@ -1,4 +1,4 @@
-import { extendTheme, ThemeConfig, theme as baseTheme } from '@chakra-ui/react';
+import { extendTheme, ThemeConfig } from '@chakra-ui/react';
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
@@ -19,6 +19,38 @@ const theme = extendTheme({
     },
   },
   components: {
+    Button: {
+      baseStyle: {
+        fontWeight: 'semibold',
+        borderRadius: 'md',
+      },
+      variants: {
+        primary: {
+          bg: 'blue.500',
+          color: 'white',
+          _hover: { bg: 'blue.600' },
+        },
+      },
+    },
+    Modal: {
+      baseStyle: {
+        dialog: {
+          borderRadius: 'md',
+          boxShadow: 'lg',
+        },
+      },
+    },
+    Input: {
+      variants: {
+        filled: {
+          field: {
+            _focus: {
+              borderColor: 'blue.500',
+            },
+          },
+        },
+      },
+    },
     Drawer: { enabled: false },
     Popover: { enabled: false },
     Tooltip: { enabled: false },
