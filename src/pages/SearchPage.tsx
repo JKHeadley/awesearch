@@ -235,10 +235,6 @@ const SearchPage: React.FC = () => {
     setTimeout(() => setIsWiggling(false), 500);
   };
 
-  // Pre-render the help text content immediately
-  const helpText = "Click Search to try the example query, or modify it for your specific needs. Use the refresh button to try another example. Click the magic wand to awesomize your query with AI suggestions!";
-
-  // Separate the critical content into its own component
   const CriticalContent = () => (
     <VStack spacing={6} width="100%">
       <Text 
@@ -299,7 +295,6 @@ const SearchPage: React.FC = () => {
           Search
         </Button>
       </HStack>
-      {/* Render help text immediately without style props that could block rendering */}
       <Text 
         as="p"
         fontSize="sm" 
@@ -307,8 +302,11 @@ const SearchPage: React.FC = () => {
         textAlign="left"
         maxW="600px"
         mx="auto"
+        mt={2}
       >
-        {helpText}
+        Click Search to try the example query, or modify it for your
+        specific needs. Use the refresh button to try another example. Click
+        the magic wand to awesomize your query with AI suggestions!
       </Text>
     </VStack>
   );
