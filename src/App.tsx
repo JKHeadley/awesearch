@@ -1,6 +1,6 @@
 import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { ColorModeScript } from '@chakra-ui/react';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -12,18 +12,9 @@ import theme from './theme';
 import { useStore } from './store/store';
 import { useScriptLoader } from './hooks/useScriptLoader';
 
-// Lazy load with prefetch hints
-const SearchPage = React.lazy(() => {
-  const detailsPromise = import('./pages/DetailsPage');
-  return import('./pages/SearchPage');
-});
-
-const DetailsPage = React.lazy(() => {
-  const keywordPromise = import('./pages/KeywordsToolsPage');
-  return import('./pages/DetailsPage');
-});
-
-// Other routes can be lazy loaded without prefetch
+// Lazy load pages with route-based code splitting
+const SearchPage = React.lazy(() => import('./pages/SearchPage'));
+const DetailsPage = React.lazy(() => import('./pages/DetailsPage'));
 const KeywordToolsPage = React.lazy(() => import('./pages/KeywordsToolsPage'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage'));
 const SitemapPage = React.lazy(() => import('./pages/SiteMapPage'));
@@ -53,31 +44,29 @@ const App: React.FC = () => {
 
   return (
     <HelmetProvider>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <Router>
-          <GoogleAnalytics>
-            <ScrollToTop />
-            <Header />
-            <Suspense fallback={<LoadingSpinner />}>
-              <Routes>
-                <Route path="/" element={<SearchPage />} />
-                <Route path="/details/:id" element={<DetailsPage />} />
-                <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/sitemap" element={<SitemapPage />} />
-                <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-                <Route path="*" element={<NotFoundPage />} />
-                <Route path="/ads.txt" element={null} />
-              </Routes>
-            </Suspense>
-            <Footer />
-            {privacyConsent === null && <PrivacyConsentBanner />}
-          </GoogleAnalytics>
-        </Router>
-      </ChakraProvider>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <Router>
+        <GoogleAnalytics>
+          <ScrollToTop />
+          <Header />
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes>
+              <Route path="/" element={<SearchPage />} />
+              <Route path="/details/:id" element={<DetailsPage />} />
+              <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/sitemap" element={<SitemapPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              <Route path="/ads.txt" element={null} />
+            </Routes>
+          </Suspense>
+          <Footer />
+          {privacyConsent === null && <PrivacyConsentBanner />}
+        </GoogleAnalytics>
+      </Router>
     </HelmetProvider>
   );
 };
