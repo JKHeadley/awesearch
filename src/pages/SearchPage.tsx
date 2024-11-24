@@ -173,8 +173,10 @@ const SearchPage: React.FC = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setQuery(e.target.value);
+    const newValue = e.target.value;
+    setQuery(newValue);
     setIsPlaceholder(false);
+    setPlaceholder(newValue);
   };
 
   const handleTryAnother = () => {
