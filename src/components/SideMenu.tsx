@@ -14,10 +14,11 @@ import {
   Button,
   IconButton,
   useBreakpointValue,
+  Divider,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import { HamburgerIcon } from '@chakra-ui/icons';
-
+import { HamburgerIcon, ChatIcon } from '@chakra-ui/icons';
+import CannyFeedback from './CannyFeedback';
 const SideMenu: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const bgColor = useColorModeValue('gray.50', 'gray.800');
@@ -74,6 +75,20 @@ const SideMenu: React.FC = () => {
                   {item.name}
                 </Link>
               ))}
+              
+              <Divider my={2} />
+              
+              <CannyFeedback>
+                <Button
+                  width="full"
+                  colorScheme="pink"
+                  variant="solid"
+                  leftIcon={<ChatIcon />}
+                  onClick={onClose}
+                >
+                  Give Feedback
+                </Button>
+              </CannyFeedback>
             </VStack>
           </DrawerBody>
         </DrawerContent>
