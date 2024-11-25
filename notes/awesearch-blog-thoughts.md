@@ -1,0 +1,5 @@
+- want to write a blog about awesearch app
+- needs to appeal to "CCN" audience (core, causal, new)
+- should be easy to read and engaging (has a narrative that pulls you in)
+- should appeal to entrepreneurs and developers, but still be interesting to the average reader
+- provide some examples of use cases, including how we used to assist in developing awesearch
