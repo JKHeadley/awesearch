@@ -3,20 +3,20 @@ import axios from 'axios';
 // Import environment variables
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8181';
 
+export interface SearchQuery {
+  _id: string;
+  query: string;
+  queryCount: number;
+}
+
 // Define types for our API responses
-export interface SearchResult {
-  id: string;
+
+
+export interface ToolDetails {
+  _id: string;
   name: string;
   url: string;
   logo?: string;
-  score: number;
-  analysis: string;
-  summary: string;
-  // Add other fields as needed
-}
-
-export interface ToolDetails extends SearchResult {
-  _id: string;
   purpose: string;
   description: string;
   intended_use: string;
@@ -29,6 +29,18 @@ export interface ToolDetails extends SearchResult {
   open_source: boolean;
   free: boolean;
   tags: any[];
+}
+
+export interface ToolSearchResult extends ToolDetails {
+  id: string;
+  score: number;
+  analysis: string;
+  summary: string;
+}
+
+export interface SearchResult {
+  searchQuery: SearchQuery;
+  tools: ToolSearchResult[];
 }
 
 export interface ToolTag {
@@ -80,7 +92,7 @@ export const searchToolsByKeyword = async (
 // Function to search the database
 export const searchDatabase = async (
   query: string,
-): Promise<SearchResult[]> => {
+): Promise<SearchResult> => {
   try {
     const response = await axios.post(`${API_URL}/search`, {
       query,
@@ -109,6 +121,38 @@ export const awesomizeQuery = async (query: string): Promise<string[]> => {
     return response.data;
   } catch (error) {
     console.error('Error expanding query:', error);
+    throw error;
+  }
+};
+
+export const getSearchQueryResults = async (
+  searchQueryId: string
+): Promise<SearchResult> => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/searchQuery/${searchQueryId}?$embed=tools&$embed=tag`
+    );
+
+    console.log(response.data);
+    
+    const toolsWithMeta = response.data.tools.map((tool: any) => ({
+      ...tool.tool,
+      score: tool.score,
+      analysis: tool.analysis,
+    }));
+
+    const lightQuery = {
+      _id: response.data._id,
+      query: response.data.query,
+      queryCount: response.data.queryCount,
+    }
+
+    return {
+      searchQuery: lightQuery,
+      tools: toolsWithMeta
+    };
+  } catch (error) {
+    console.error('Error fetching search query results:', error);
     throw error;
   }
 };

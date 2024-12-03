@@ -14,7 +14,7 @@ import { useToast } from '@chakra-ui/react';
 import SearchResults from '../components/SearchResults';
 import LoadingOverlay from '../components/LoadingOverlay';
 import AdSense from '../components/AdSense';
-import { searchDatabase, awesomizeQuery } from '../api/search';
+import { searchDatabase, awesomizeQuery, getSearchQueryResults } from '../api/search';
 import { useStore } from '../store/store';
 import { exampleQueries } from './ExampleQueries';
 import { ReactGAEvent } from '../utils/react-ga-event';
@@ -140,7 +140,8 @@ const SearchPage: React.FC = () => {
     setIsLoading(true);
     try {
       const results = await searchDatabase(searchQuery);
-      setSearchResults(results);
+      setSearchResults(results.tools);
+      window.history.pushState({}, '', `/search/${results.searchQuery._id}`);
     } catch (error) {
       console.error('Error during search:', error);
       toast({
@@ -236,6 +237,36 @@ const SearchPage: React.FC = () => {
     setIsWiggling(true);
     setTimeout(() => setIsWiggling(false), 500);
   };
+
+  useEffect(() => {
+    const loadSearchFromUrl = async () => {
+      const path = window.location.pathname;
+      const match = path.match(/\/search\/(.*)/);
+      if (match) {
+        const searchQueryId = match[1];
+        setIsLoading(true);
+        try {
+          const results = await getSearchQueryResults(searchQueryId);
+          setSearchResults(results.tools);
+          setQuery(results.searchQuery.query);
+          setIsPlaceholder(false);
+        } catch (error) {
+          console.error('Error loading search from URL:', error);
+          toast({
+            title: 'Error loading search results',
+            description: 'Failed to load the shared search results.',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadSearchFromUrl();
+  }, []);
 
   return (
     <>

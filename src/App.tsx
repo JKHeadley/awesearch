@@ -39,6 +39,8 @@ const App: React.FC = () => {
             <Header />
             <Routes>
               <Route path="/" element={<SearchPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/search/:id" element={<SearchPage />} />
               <Route path="/details/:id" element={<DetailsPage />} />
               <Route path="/keyword/:keyword" element={<KeywordToolsPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
